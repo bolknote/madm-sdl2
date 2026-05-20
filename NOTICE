@@ -1,0 +1,48 @@
+MADM - Notice and credits
+=========================
+
+This repository is a modern SDL2/macOS port of MADM, a simulator for the
+Manchester Mark I prototype / Manchester Baby / SSEM.
+
+Original MADM
+-------------
+
+Original simulator:
+
+    MADM for MS-DOS
+    Lee Wittenberg, 1989
+
+The original package was distributed as `madm.zip` through the Computer
+Conservation Society / Computer50 Manchester Mark I simulator archive. The
+package includes Lee Wittenberg's C source code, an MS-DOS executable, a
+makefile, and README.TXT.
+
+Original README contact block:
+
+    Lee Wittenberg
+    Dept. of Mathematics and Computer Science
+    Kean College of New Jersey
+    Union, NJ 07083
+    leew@pilot.njin.net
+
+Port and repository
+-------------------
+
+This port updates the original C code for a modern C17 toolchain and replaces
+the DOS graphics/keyboard layer with SDL2-based macOS code. The program catalog
+and conversion scripts include material reconstructed from public Manchester
+Baby / SSEM simulator and program archives; see `programs/README.md` and
+`scripts/README.md` for source notes.
+
+License status
+--------------
+
+No explicit open-source license was found in the original MADM MS-DOS package:
+there is no LICENSE/COPYING file and the source headers/README do not state
+redistribution or modification terms.
+
+For that reason, this repository does not claim that the original MADM code is
+available under MIT, BSD, GPL, public domain, or any other open-source license.
+It is published here with attribution as a preservation-oriented port. If you
+are Lee Wittenberg or a rightsholder for the original MADM code and want the
+license status clarified or the repository changed, please open an issue.

@@ -53,3 +53,9 @@ Built with **C17** (`-std=c17 -pedantic -Wall -Wextra`). Machine state uses
 - `programs/kilburn_july48.store`: highest-factor routine from *Early British Computers* / Tootill notebook
 
 See `programs/README.md` for the program catalog, sources, and store file format.
+
+## Credits and license status
+
+This project is a modern port of Lee Wittenberg's 1989 MADM simulator for
+MS-DOS. No explicit open-source license was found in the original MADM package;
+see `NOTICE` for attribution and license-status notes.
