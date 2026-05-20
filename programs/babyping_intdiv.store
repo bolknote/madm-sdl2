@@ -1,0 +1,36 @@
+# BabyPing — Integer division (same bytes as davidsharp_intdiv.store)
+# https://github.com/hrvach/babyping/blob/main/programs/intdiv.ssem
+#
+# ci-start -1
+@0 0x1e00000
+@1 0x220401d
+@2 0x1e0601b
+@3 0x220401c
+@4 0x1e0601a
+@5 16410
+@6 0x3e0801d
+@7 0x100601c
+@8 0x100c000
+@9 0x1200019
+@10 0xc0801b
+@11 24607
+@12 0x20e000
+@13 0x20401e
+@14 0x208018
+@15 0x20601e
+@16 0x3e0401e
+@17 24606
+@18 0x3c00017
+@19 0x200000
+@20 0x200000
+@21 0x200000
+@22 0x3c00000
+@23 2
+@24 1
+@25 12
+@26 0
+@27 0
+@28 666
+@29 42
+@30 0
+@31 0

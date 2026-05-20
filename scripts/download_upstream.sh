@@ -48,6 +48,27 @@ pdftotext guide.pdf guide.txt 2>/dev/null || true
 curl -fsSL -o empty-program.html 'https://rosettacode.org/wiki/Empty_program'
 curl -fsSL -o hello-graphical.html 'https://rosettacode.org/wiki/Hello_world/Graphical'
 
+echo "== gobaby (Joseph Adams) =="
+GB="$UP/gobaby"
+mkdir -p "$GB"
+if [ ! -d "$GB/gobaby/.git" ]; then
+  git clone --depth 1 https://github.com/jcla1/gobaby.git "$GB/gobaby"
+fi
+
+echo "== Open SIMH SSEM (reference; no bundled .st programs) =="
+OS="$UP/open-simh"
+mkdir -p "$OS"
+if [ ! -d "$OS/simh/.git" ]; then
+  git clone --depth 1 https://github.com/open-simh/simh.git "$OS/simh"
+fi
+
+echo "== Tiny Tapeout Manchester Baby =="
+TT="$UP/tt-manchester-baby"
+mkdir -p "$TT"
+if [ ! -d "$TT/tt-manchester-baby/.git" ]; then
+  git clone --depth 1 https://github.com/diy-ic/tt-manchester-baby.git "$TT/tt-manchester-baby"
+fi
+
 echo "== BabyPing (ICMP emulator programs) =="
 BP="$UP/babyping"
 mkdir -p "$BP"

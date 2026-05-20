@@ -1,5 +1,5 @@
-# BabyPing — factor program (bit dump)
-# https://github.com/hrvach/babyping
+# BabyPing — Highest-factor (Kilburn-style bit dump) (same bytes as davidsharp_nightmare.store)
+# https://github.com/hrvach/babyping/blob/main/programs/kilburn.ssem
 #
 # ci-start -1
 @0 0x20822560

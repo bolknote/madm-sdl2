@@ -1,0 +1,36 @@
+# gobaby — Successive prime generator (chainable) (same bytes as davidsharp_primegen.store)
+# https://github.com/jcla1/gobaby/blob/main/examples/primegen.asm
+#
+# ci-start -1
+@0 24
+@1 16405
+@2 24597
+@3 16405
+@4 32783
+@5 24597
+@6 16399
+@7 24598
+@8 16406
+@9 24598
+@10 16406
+@11 32783
+@12 24598
+@13 32789
+@14 49152
+@15 -1
+@16 16405
+@17 24599
+@18 16407
+@19 32790
+@20 0
+@21 1
+@22 0
+@23 0
+@24 7
+@25 49152
+@26 8192
+@27 24599
+@28 16407
+@29 32790
+@30 49152
+@31 20

@@ -1,0 +1,36 @@
+# BabyPing — Three-minute noodle timer (same bytes as davidsharp_noodletimer.store)
+# https://github.com/hrvach/babyping/blob/main/programs/noodle.ssem
+#
+# ci-start -1
+@0 0
+@1 -62961703
+@2 24860
+@3 16668
+@4 33053
+@5 0xc306019
+@6 17311
+@7 33051
+@8 49408
+@9 0x3c3c039a
+@10 16389
+@11 33883
+@12 26332
+@13 0xc30455c
+@14 25669
+@15 16385
+@16 34779
+@17 0x3c3c63dc
+@18 18396
+@19 24577
+@20 33758
+@21 0xc30c440
+@22 58304
+@23 576
+@24 1088
+@25 -62980096
+@26 6
+@27 -1
+@28 0
+@29 -62914560
+@30 -62961698
+@31 -2147481904

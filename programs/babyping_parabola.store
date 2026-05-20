@@ -1,0 +1,36 @@
+# BabyPing — Parabola / difference-equation plot (same bytes as davidsharp_diffeqt.store)
+# https://github.com/hrvach/babyping/blob/main/programs/parabola.ssem
+#
+# ci-start -1
+@0 0
+@1 16413
+@2 32797
+@3 24605
+@4 49152
+@5 57344
+@6 16413
+@7 24605
+@8 16406
+@9 32797
+@10 24606
+@11 16414
+@12 24598
+@13 16392
+@14 32796
+@15 24606
+@16 16414
+@17 24584
+@18 32795
+@19 24588
+@20 16412
+@21 32794
+@22 24604
+@23 16412
+@24 24604
+@25 31
+@26 1
+@27 -8192
+@28 -6
+@29 0x20000
+@30 0
+@31 0
