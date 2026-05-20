@@ -1,0 +1,21 @@
+/.DS_Store
+*.o
+*.d
+
+# Build outputs
+/madm
+
+# macOS / editor clutter
+.DS_Store
+*.swp
+*.swo
+
+# Generated caches
+__pycache__/
+*.py[cod]
+
+# Downloaded upstream source archives and generated previews
+/scripts/upstream/
+
+# Local generated media; keep checked-in docs/programs small by default
+/artifacts/

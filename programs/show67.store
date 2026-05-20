@@ -1,0 +1,44 @@
+# Program: reveal "67" on the S tube after Enter.
+#
+# This is not a preloaded bitmap.  Rows 3..8 start as scrambled values X.
+# The program computes each visible row as:
+#
+#   A = -X
+#   A = A - key
+#   row = A
+#
+# with key = -89478485.  Only after the instructions run do rows 3..8 become
+# the bitmap.  The key is cleared before STOP.  Display is LSB-left.
+
+@0 9
+@1 0x0000
+
+@3 85400917
+@4 87380309
+@5 88938837
+@6 89198933
+@7 89330005
+@8 89333077
+@9 -89478485
+
+@10 0x4003
+@11 0x8009
+@12 0x6003
+@13 0x4004
+@14 0x8009
+@15 0x6004
+@16 0x4005
+@17 0x8009
+@18 0x6005
+@19 0x4006
+@20 0x8009
+@21 0x6006
+@22 0x4007
+@23 0x8009
+@24 0x6007
+@25 0x4008
+@26 0x8009
+@27 0x6008
+@28 0x8008
+@29 0x6009
+@30 0xE000

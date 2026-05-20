@@ -1,0 +1,33 @@
+# Kilburn–Tootill "Highest proper factor" — amended program, 18 July 1948
+# Source: Tootill notebook + Computer50 notes.
+#
+# Memory (before run):  [23]=-a  [24]=a-1  [26]=-b  [27]=b  [25]=remainder r
+# Constants: [20]=-3 (inner loop skip)  [21]=1  [22]=4 (outer loop entry CI)
+#
+# This file uses a = 2^18 (lines 23–24 below).  For a=67 use @23 -67 and @24 66.
+
+@0  0
+@1  0x4018
+@2  0x601a
+@3  0x401a
+@4  0x601b
+@5  0x4017
+@6  0x801b
+@7  0xc000
+@8  0x2014
+@9  0x801a
+@10 0x6019
+@11 0x4019
+@12 0xc000
+@13 0xe000
+@14 0x401a
+@15 0x8015
+@16 0x601b
+@17 0x401b
+@18 0x601a
+@19 0x0016
+@20 -3
+@21 1
+@22 4
+@23 -0x40000
+@24 0x3ffff
