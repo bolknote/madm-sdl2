@@ -7,6 +7,7 @@
 #include <string.h>
 #include <unistd.h>
 
+#include "keyboard.h"
 #include "madm.h"
 #include "proto.h"
 

@@ -76,7 +76,6 @@ static int label_row_top(unsigned y)
 static void draw_char(int px, int py_top, char ch)
 {
 	const unsigned char *glyph;
-	int row, col;
 
 	if ((unsigned char)ch >= 128)
 		return;
@@ -84,10 +83,10 @@ static void draw_char(int px, int py_top, char ch)
 	set_cga_color(CGA_BRIGHT_R, CGA_BRIGHT_G, CGA_BRIGHT_B);
 	{
 		int sy_top = to_sdl_y((unsigned)py_top);
-		for (row = 0; row < 8; row++) {
+		for (int row = 0; row < 8; row++) {
 			unsigned char bits = (unsigned char)glyph[row];
 			int sy = sy_top + row * FONT_SCALE;
-			for (col = 0; col < 8; col++) {
+			for (int col = 0; col < 8; col++) {
 				if ((bits >> col) & 1) {
 					SDL_Rect r = {
 						px + col * FONT_SCALE,

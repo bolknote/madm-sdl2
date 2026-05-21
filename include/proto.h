@@ -49,7 +49,7 @@ void madm_draw_cursor(void);
 /* init */
 void initialize(void);
 void clean_up(void);
-void process_options(int argc, char *argv[]);
+void process_options(int argc, char *const *const argv);
 int madm_load_store_file(const char *path, bool *ci_start_minus_one);
 
 /* memory */

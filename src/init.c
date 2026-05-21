@@ -56,7 +56,7 @@ reject_trailing_text(const char *path, unsigned input_line, char *p)
 }
 
 static int
-parse_store_addr(const char *path, unsigned input_line, char *p, char **end, Addr *line)
+parse_store_addr(const char *path, unsigned input_line, const char *p, char **end, Addr *line)
 {
 	unsigned long n;
 
@@ -71,7 +71,7 @@ parse_store_addr(const char *path, unsigned input_line, char *p, char **end, Add
 }
 
 static int
-parse_store_value(const char *path, unsigned input_line, char *p, char **end, Line *value)
+parse_store_value(const char *path, unsigned input_line, const char *p, char **end, Line *value)
 {
 	if (*p == '-') {
 		long long n;
@@ -190,7 +190,7 @@ clean_up(void)
 }
 
 void
-process_options(int argc, char *argv[])
+process_options(int argc, char *const *const argv)
 {
 	for (int i = 1; i < argc; i++) {
 		if (argv[i][0] != '-' || argv[i][1] == '\0') {
