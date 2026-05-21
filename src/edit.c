@@ -70,5 +70,5 @@ void
 toggle_bit(Addr line, unsigned bit)
 {
 	if (bit < LINE_BITS)
-		store[line] ^= (Line)(INT32_C(1) << bit);
+		store[line] ^= UINT32_C(1) << bit;
 }

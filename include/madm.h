@@ -15,10 +15,11 @@ typedef enum {
 
 extern MadmStatus madm_status;
 
-/* 32-bit Williams tube word (signed, two's complement) */
-typedef int32_t Line;
+/* 32-bit Williams tube word; arithmetic wraps as two's complement. */
+typedef uint32_t Line;
 #define LINE_BITS 32u
-#define MAX_LINE ((UINT32_C(1) << LINE_BITS) - 1u)
+#define MAX_LINE UINT32_MAX
+#define LINE_SIGN_BIT (UINT32_C(1) << (LINE_BITS - 1u))
 
 typedef uint8_t Addr;
 

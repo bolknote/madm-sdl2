@@ -10,6 +10,20 @@ brew install sdl2
 make
 ```
 
+Sanitizer build:
+
+```bash
+make sanitize
+make run-sanitize
+```
+
+Tests:
+
+```bash
+make test
+make test-sanitize
+```
+
 ## Run
 
 ```bash
@@ -45,7 +59,7 @@ scripts/        optional; not needed to run the simulator
 ```
 
 Built with **C17** (`-std=c17 -pedantic -Wall -Wextra`). Machine state uses
-`int32_t` tube words, `uint8_t` store addresses, and `bool` where appropriate.
+`uint32_t` tube words, `uint8_t` store addresses, and `bool` where appropriate.
 
 ## Machine (summary)
 

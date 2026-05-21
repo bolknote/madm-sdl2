@@ -8,7 +8,7 @@
 void
 load_negative(Addr s)
 {
-	accumulator[A_LINE] = -store[s];
+	accumulator[A_LINE] = 0u - store[s];
 	display_line(A_TUBE, A_LINE);
 }
 

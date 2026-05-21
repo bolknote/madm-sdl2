@@ -48,17 +48,21 @@ madm_pump_keyboard(void)
 {
 	SDL_Event e;
 
+	if (have_pending)
+		return;
+
 	while (SDL_PollEvent(&e)) {
 		if (e.type == SDL_QUIT) {
 			have_pending = true;
 			pending_key = QUIT_CMD;
 			return;
 		}
-		if (e.type == SDL_KEYDOWN && !have_pending) {
+		if (e.type == SDL_KEYDOWN) {
 			int k = map_sdl_key(e.key.keysym.sym);
 			if (k >= 0) {
 				have_pending = true;
 				pending_key = k;
+				return;
 			}
 		}
 	}

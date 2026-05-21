@@ -22,7 +22,7 @@ void
 test(Addr s)
 {
 	(void)s;
-	if (accumulator[A_LINE] < 0)
+	if ((accumulator[A_LINE] & LINE_SIGN_BIT) != 0)
 		++control[CI_LINE];
 }
 

@@ -10,12 +10,14 @@ typedef struct {
 	unsigned bit;
 	unsigned x;
 	unsigned y;
+	bool visible;
 } Cursor;
 
 static Cursor cursor = {
 	0, 0,
 	S_X - 1,
-	S_Y - 1
+	S_Y - 1,
+	true
 };
 
 static void
@@ -30,6 +32,8 @@ cursor_sync_coords(void)
 void
 madm_draw_cursor(void)
 {
+	if (!cursor.visible)
+		return;
 	cursor_sync_coords();
 	draw_box(1, cursor.x, cursor.y, cursor.x + BLOB_WIDTH + 1, cursor.y + BLOB_HEIGHT + 1);
 }
@@ -37,13 +41,14 @@ madm_draw_cursor(void)
 void
 show_cursor(void)
 {
+	cursor.visible = true;
 	madm_draw_cursor();
 }
 
 void
 erase_cursor(void)
 {
-	/* full-frame redraw clears the old cursor */
+	cursor.visible = false;
 }
 
 void
@@ -51,6 +56,7 @@ place_cursor(Addr line, unsigned bit)
 {
 	cursor.line = (Addr)(line % STORE_SIZE);
 	cursor.bit = bit % LINE_BITS;
+	cursor.visible = true;
 	cursor_sync_coords();
 	madm_present();
 }

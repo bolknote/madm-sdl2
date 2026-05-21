@@ -50,6 +50,7 @@ void madm_draw_cursor(void);
 void initialize(void);
 void clean_up(void);
 void process_options(int argc, char *argv[]);
+int madm_load_store_file(const char *path);
 
 /* memory */
 void load_negative(Addr s);

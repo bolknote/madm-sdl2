@@ -2,36 +2,108 @@
  * init.c — startup, demo program, store file loading
  */
 #include <ctype.h>
+#include <errno.h>
+#include <limits.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
-#include "display.h"
 #include "madm.h"
 #include "proto.h"
 
 static const char *load_path;
 static bool ci_start_minus_one;
 
+static char *
+skip_space(char *p)
+{
+	while (*p != '\0' && isspace((unsigned char)*p))
+		p++;
+	return p;
+}
+
 static int
-load_store_file(const char *path)
+reject_trailing_text(const char *path, unsigned input_line, char *p)
+{
+	p = skip_space(p);
+	if (*p == '#' || *p == '\0')
+		return 0;
+	fprintf(stderr, "%s:%u: trailing text after store value\n", path, input_line);
+	return -1;
+}
+
+static int
+parse_store_addr(const char *path, unsigned input_line, char *p, char **end, Addr *line)
+{
+	unsigned long n;
+
+	errno = 0;
+	n = strtoul(p, end, 0);
+	if (*end == p || errno == ERANGE || n >= STORE_SIZE) {
+		fprintf(stderr, "%s:%u: store line out of range\n", path, input_line);
+		return -1;
+	}
+	*line = (Addr)n;
+	return 0;
+}
+
+static int
+parse_store_value(const char *path, unsigned input_line, char *p, char **end, Line *value)
+{
+	if (*p == '-') {
+		long long n;
+
+		errno = 0;
+		n = strtoll(p, end, 0);
+		if (*end == p || errno == ERANGE || n < INT32_MIN) {
+			fprintf(stderr, "%s:%u: signed store value out of range\n", path, input_line);
+			return -1;
+		}
+		*value = (Line)n;
+		return 0;
+	}
+
+	{
+		unsigned long long n;
+
+		errno = 0;
+		n = strtoull(p, end, 0);
+		if (*end == p || errno == ERANGE || n > MAX_LINE) {
+			fprintf(stderr, "%s:%u: store value out of range\n", path, input_line);
+			return -1;
+		}
+		*value = (Line)n;
+		return 0;
+	}
+}
+
+int
+madm_load_store_file(const char *path)
 {
 	FILE *fp = fopen(path, "r");
 	char buf[128];
+	unsigned input_line = 0;
+	unsigned seq = 0;
 
 	if (!fp) {
 		perror(path);
 		return -1;
 	}
 
-	for (Addr seq = 0; fgets(buf, sizeof buf, fp);) {
+	while (fgets(buf, sizeof buf, fp)) {
 		char *p = buf;
 		Addr line;
 		Line value;
 		char *end;
 
-		while (*p != '\0' && isspace((unsigned char)*p))
-			p++;
+		input_line++;
+		if (strchr(buf, '\n') == NULL && !feof(fp)) {
+			fprintf(stderr, "%s:%u: line too long\n", path, input_line);
+			fclose(fp);
+			return -1;
+		}
+
+		p = skip_space(p);
 		if (*p == '\0')
 			continue;
 		if (*p == '#') {
@@ -42,21 +114,27 @@ load_store_file(const char *path)
 		}
 
 		if (*p == '@') {
-			line = (Addr)strtol(p + 1, &end, 0);
-			p = end;
-			while (*p != '\0' && isspace((unsigned char)*p))
-				p++;
+			p = skip_space(p + 1);
+			if (parse_store_addr(path, input_line, p, &end, &line) != 0) {
+				fclose(fp);
+				return -1;
+			}
+			p = skip_space(end);
 		} else {
-			line = seq++;
+			if (seq >= STORE_SIZE) {
+				fprintf(stderr, "%s:%u: too many store lines\n", path, input_line);
+				fclose(fp);
+				return -1;
+			}
+			line = (Addr)seq++;
 		}
 
-		if (line >= STORE_SIZE) {
-			fprintf(stderr, "%s: store line %u out of range\n", path, line);
+		if (parse_store_value(path, input_line, p, &end, &value) != 0 ||
+		    reject_trailing_text(path, input_line, end) != 0) {
 			fclose(fp);
 			return -1;
 		}
 
-		value = (Line)strtol(p, NULL, 0);
 		store[line] = value;
 	}
 
@@ -64,22 +142,14 @@ load_store_file(const char *path)
 	return 0;
 }
 
-static void
-refresh_store_display(void)
-{
-	for (Addr line = 0; line < STORE_SIZE; line++)
-		display_line(S_TUBE, line);
-}
-
 void
 initialize(void)
 {
 	if (load_path != NULL) {
-		if (load_store_file(load_path) != 0)
+		if (madm_load_store_file(load_path) != 0)
 			exit(EXIT_FAILURE);
 		if (ci_start_minus_one)
-			control[CI_LINE] = -1;
-		refresh_store_display();
+			control[CI_LINE] = MAX_LINE;
 	}
 
 	set_up_graphics();

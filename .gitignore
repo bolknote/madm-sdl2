@@ -4,6 +4,8 @@
 
 # Build outputs
 /madm
+/madm-sanitize
+/.build/
 
 # macOS / editor clutter
 .DS_Store

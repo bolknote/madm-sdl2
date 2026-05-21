@@ -8,7 +8,7 @@
 void
 fetch_instruction(void)
 {
-	control[PI_LINE] = store[(uint8_t)(++control[CI_LINE] & MAX_ADDR)];
+	control[PI_LINE] = store[(Addr)(++control[CI_LINE] & MAX_ADDR)];
 
 	display_line(C_TUBE, CI_LINE);
 	display_line(C_TUBE, PI_LINE);
