@@ -95,6 +95,20 @@ echo "== JsSSEM (Wayback) =="
 curl -fsSL -o "$UP/jsssem.html" \
   'https://web.archive.org/web/2020/http://www.edmundgriffiths.com/jsssem.html' || true
 
+echo "== Round-2 corpus (git) =="
+clone_if_missing() {
+  local dir="$1" url="$2"
+  mkdir -p "$(dirname "$dir")"
+  if [ ! -d "$dir/.git" ]; then
+    git clone --depth 1 "$url" "$dir"
+  fi
+}
+clone_if_missing "$UP/pico-baby-if/pico-baby-if" https://github.com/krisjdev/pico-baby-if.git
+clone_if_missing "$UP/babyutils/babyutils" https://github.com/andy-bower/babyutils.git
+clone_if_missing "$UP/comparch/comparch" https://gitlab.com/charles.fox/comparch.git
+clone_if_missing "$UP/bower-extra/manchester-baby-sim" https://github.com/andy-bower/manchester-baby-sim.git
+clone_if_missing "$UP/bower-extra/ManchesterBabyPython" https://github.com/andy-bower/ManchesterBabyPython.git
+
 cd "$UP"
 echo "Done. Cache: $UP and $DS (ssem.jar at $DS/unpacked/ssem/ssem.jar)"
 ls -la "$UP" "$DS" "$HASE" 2>/dev/null | head -20

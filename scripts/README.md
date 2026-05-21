@@ -14,6 +14,7 @@ python3 convert_program_hunt.py     # HASE, JsSSEM fibo, Rosetta, CCS FACTORCT (
 python3 convert_nevynuk.py          # NevynUK *.ssem (needs upstream/nevynuk/ManchesterBaby)
 python3 convert_extra_hunt.py       # BabyPing, baby-emulator examples, ccs_prog1_989
 python3 convert_more_sources.py   # BabyPing 6× .ssem, gobaby examples/*.asm
+python3 convert_round2.py         # Bower sim/Python asm; skips label/EJA babyutils
 python3 visual_check.py             # PNG previews → upstream/_visual_check/
 ./run_sim.sh ../programs/cambridge_fib.store
 ```
