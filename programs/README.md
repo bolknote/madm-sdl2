@@ -297,6 +297,11 @@ Tracked source: `reference/rust_baby_emulator_countdown.asm` (crate README; `con
 | [Retrocomputing SE #2869](https://retrocomputing.stackexchange.com/a/2869) | Full `factor.asm` = `gobaby_factor` / `ccs_factorct` (cached as `scripts/upstream/retro-factor/factor.asm`) |
 | Mark Stevens / NevynUK | `reference/mark_stevens_{add,hfr989}.ssem` → `nevynuk_add`, `nevynuk_hcf989` (989 layout differs from `davidsharp_hfr989`) |
 | Retro SE factor listing | `reference/retro_factor_gobaby.asm` (= `gobaby_factor` / `ccs_factorct`) |
+| Cambridge SVBaby SW15–17 | `reference/cambridge_svbaby_switch_map.md` — prog1/2/3 = NIGHT/NOODLE/FIB SNPs (catalog dups) |
+| baby-emulator tests | Only API tests; programs = `baby_rust_add5` + `baby_rust_countdown` |
+| Pico `program.c` | `reference/pico_baby_if_program.c` = Turing long div (= `nevynuk_turing_longdiv`) |
+| gobaby `examples/` | 3 files only; all in catalog |
+| Layer-6 summary | `reference/LAYER6_HARVEST.md` |
 | [open-simh/simh](https://github.com/open-simh/simh) | `SSEM/` supports `LOAD`/`DUMP` of `.st` store files and mnemonic entry, but ships no sample `.st` programs |
 | [diy-ic/tt-manchester-baby](https://github.com/diy-ic/tt-manchester-baby) | `test/test.py` init RAM is Turing long division, identical to `nevynuk_turing_longdiv.store` |
 | [EMF Manchester Baby](https://em.ulat.es/machines/ManchesterBaby/) | HTTPS fetch failed here; retry manually for embedded JS demos |
@@ -382,6 +387,7 @@ python3 convert_babybaby.py
 python3 convert_round5.py
 python3 convert_round6.py
 python3 convert_round7.py
+python3 convert_round8.py
 ```
 
 See `../scripts/README.md` for script-specific notes.
