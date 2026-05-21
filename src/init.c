@@ -12,7 +12,6 @@
 #include "proto.h"
 
 static const char *load_path;
-static bool ci_start_minus_one;
 
 static char *
 skip_space(char *p)
@@ -20,6 +19,30 @@ skip_space(char *p)
 	while (*p != '\0' && isspace((unsigned char)*p))
 		p++;
 	return p;
+}
+
+static bool
+is_ci_start_minus_one(char *p)
+{
+	static const char directive[] = "ci-start";
+	char *end;
+	long n;
+
+	p = skip_space(p);
+	if (strncmp(p, directive, sizeof directive - 1) != 0)
+		return false;
+	p += sizeof directive - 1;
+	if (!isspace((unsigned char)*p))
+		return false;
+
+	p = skip_space(p);
+	errno = 0;
+	n = strtol(p, &end, 0);
+	if (end == p || errno == ERANGE || n != -1)
+		return false;
+
+	end = skip_space(end);
+	return *end == '\0';
 }
 
 static int
@@ -78,12 +101,13 @@ parse_store_value(const char *path, unsigned input_line, char *p, char **end, Li
 }
 
 int
-madm_load_store_file(const char *path)
+madm_load_store_file(const char *path, bool *ci_start_minus_one)
 {
 	FILE *fp = fopen(path, "r");
 	char buf[128];
 	unsigned input_line = 0;
 	unsigned seq = 0;
+	bool found_ci_start_minus_one = false;
 
 	if (!fp) {
 		perror(path);
@@ -107,9 +131,8 @@ madm_load_store_file(const char *path)
 		if (*p == '\0')
 			continue;
 		if (*p == '#') {
-			if (strstr(p, "ci-start") != NULL &&
-			    strstr(p, "-1") != NULL)
-				ci_start_minus_one = true;
+			if (is_ci_start_minus_one(p + 1))
+				found_ci_start_minus_one = true;
 			continue;
 		}
 
@@ -139,6 +162,8 @@ madm_load_store_file(const char *path)
 	}
 
 	fclose(fp);
+	if (ci_start_minus_one != NULL)
+		*ci_start_minus_one = found_ci_start_minus_one;
 	return 0;
 }
 
@@ -146,7 +171,9 @@ void
 initialize(void)
 {
 	if (load_path != NULL) {
-		if (madm_load_store_file(load_path) != 0)
+		bool ci_start_minus_one = false;
+
+		if (madm_load_store_file(load_path, &ci_start_minus_one) != 0)
 			exit(EXIT_FAILURE);
 		if (ci_start_minus_one)
 			control[CI_LINE] = MAX_LINE;

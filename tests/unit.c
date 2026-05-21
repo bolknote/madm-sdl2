@@ -36,6 +36,64 @@ madm_present(void)
 {
 }
 
+int
+madm_next_cmd(void)
+{
+	return 0;
+}
+
+int
+madm_cmd_ready(void)
+{
+	return 0;
+}
+
+int
+madm_peek_cmd(void)
+{
+	return -1;
+}
+
+void
+madm_delay_ms(unsigned ms)
+{
+	(void)ms;
+}
+
+void
+madm_speed_faster(void)
+{
+}
+
+void
+madm_speed_slower(void)
+{
+}
+
+void
+erase_cursor(void)
+{
+}
+
+void
+place_cursor(Addr line, unsigned bit)
+{
+	(void)line;
+	(void)bit;
+}
+
+void
+move_cursor(int d_line, int d_bit)
+{
+	(void)d_line;
+	(void)d_bit;
+}
+
+void
+toggle_current_bit(void)
+{
+}
+
 static void
 fail_at(int line, const char *expr)
 {
@@ -111,7 +169,7 @@ expect_store_rejected(const char *text)
 		perror("stderr redirect");
 		exit(EXIT_FAILURE);
 	}
-	rc = madm_load_store_file(TEST_STORE_PATH);
+	rc = madm_load_store_file(TEST_STORE_PATH, NULL);
 	fflush(stderr);
 	if (dup2(saved_stderr, STDERR_FILENO) < 0) {
 		perror("stderr restore");
@@ -173,18 +231,57 @@ test_fetch_wrap_and_decode(void)
 }
 
 static void
+test_toggle_bit_31(void)
+{
+	reset_machine();
+
+	toggle_bit(0, 31);
+	EXPECT_LINE(store[0], LINE_SIGN_BIT);
+	toggle_bit(0, 31);
+	EXPECT_LINE(store[0], 0);
+	toggle_bit(0, LINE_BITS);
+	EXPECT_LINE(store[0], 0);
+}
+
+static void
 test_store_loader_accepts_word_edges(void)
 {
+	bool ci_start_minus_one = true;
+
 	reset_machine();
 	write_store_file(
 		"@0 -1\n"
 		"@1 0xffffffff\n"
 		"@31 -2147483648 # min signed 32-bit value\n");
 
-	CHECK(madm_load_store_file(TEST_STORE_PATH) == 0);
+	CHECK(madm_load_store_file(TEST_STORE_PATH, &ci_start_minus_one) == 0);
+	CHECK(!ci_start_minus_one);
 	EXPECT_LINE(store[0], MAX_LINE);
 	EXPECT_LINE(store[1], MAX_LINE);
 	EXPECT_LINE(store[31], LINE_SIGN_BIT);
+}
+
+static void
+test_store_loader_ci_start_metadata(void)
+{
+	bool ci_start_minus_one = false;
+
+	reset_machine();
+	write_store_file(
+		"# not-ci-start -1\n"
+		"# ci-start -1\n"
+		"@0 0\n");
+
+	CHECK(madm_load_store_file(TEST_STORE_PATH, &ci_start_minus_one) == 0);
+	CHECK(ci_start_minus_one);
+
+	ci_start_minus_one = true;
+	write_store_file(
+		"# ci-start -1 but not really\n"
+		"@0 0\n");
+
+	CHECK(madm_load_store_file(TEST_STORE_PATH, &ci_start_minus_one) == 0);
+	CHECK(!ci_start_minus_one);
 }
 
 static void
@@ -209,7 +306,9 @@ main(void)
 	test_wrapping_arithmetic();
 	test_sign_bit_cmp();
 	test_fetch_wrap_and_decode();
+	test_toggle_bit_31();
 	test_store_loader_accepts_word_edges();
+	test_store_loader_ci_start_metadata();
 	test_store_loader_rejects_bad_input();
 
 	remove(TEST_STORE_PATH);

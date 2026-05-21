@@ -10,7 +10,7 @@ SAN_BUILD_DIR := .build/sanitize
 SAN_OBJ := $(addprefix $(SAN_BUILD_DIR)/,$(SRC:.c=.o))
 TEST_APP := .build/tests/unit
 TEST_SAN_APP := .build/tests/unit-sanitize
-TEST_SRC := tests/unit.c src/arith.c src/control.c src/fetch.c src/init.c src/madm.c src/memory.c
+TEST_SRC := tests/unit.c src/arith.c src/control.c src/edit.c src/fetch.c src/init.c src/madm.c src/memory.c
 
 SDL_CFLAGS := $(shell pkg-config --cflags sdl2 2>/dev/null)
 SDL_LIBS   := $(shell pkg-config --libs sdl2 2>/dev/null)
@@ -67,4 +67,4 @@ $(TEST_SAN_APP): $(TEST_SRC)
 
 clean:
 	rm -f $(OBJ) $(APP) $(SAN_APP)
-	rm -rf $(SAN_BUILD_DIR)
+	rm -rf .build
