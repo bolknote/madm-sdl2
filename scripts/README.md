@@ -15,6 +15,8 @@ python3 convert_nevynuk.py          # NevynUK *.ssem (needs upstream/nevynuk/Man
 python3 convert_extra_hunt.py       # BabyPing, baby-emulator examples, ccs_prog1_989
 python3 convert_more_sources.py   # BabyPing 6× .ssem, gobaby examples/*.asm
 python3 convert_round2.py         # Bower sim/Python asm; skips label/EJA babyutils
+python3 convert_round3.py         # babyutils labeled asm (EJA); pico/tt cross-check
+python3 convert_fox_retro.py      # Fox book 32-bit dump, Retro SE / gobaby factor.asm
 python3 visual_check.py             # PNG previews → upstream/_visual_check/
 ./run_sim.sh ../programs/cambridge_fib.store
 ```

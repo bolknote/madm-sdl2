@@ -138,6 +138,88 @@ def parse_asm_text(text: str) -> tuple[list[int], int | None]:
     return store, ci
 
 
+def _parse_operand(token: str, labels: dict[str, int]) -> int:
+    token = token.strip()
+    if not token:
+        return 0
+    if token in labels:
+        return labels[token]
+    if re.match(r"-?0x[0-9a-fA-F]+$", token):
+        return int(token, 0)
+    if re.match(r"-?\d+$", token):
+        return int(token, 10)
+    raise ValueError(f"unknown operand {token!r}")
+
+
+def parse_babyutils_asm(text: str) -> tuple[list[int], int | None]:
+    """Andy Bower babyutils: labels, EJA, implicit line addresses."""
+    records: list[tuple[int | None, str | None, str]] = []
+    for raw in text.strip().splitlines():
+        line = raw.split("--")[0].strip()
+        if not line:
+            continue
+        m = re.match(r"^(\d+)\s*:\s*(.*)$", line)
+        if m:
+            org = int(m.group(1))
+            rest = m.group(2).strip()
+            records.append((org, None, rest))
+            continue
+        m = re.match(r"^(\w+)\s*:\s*(.*)$", line)
+        if m and m.group(1).upper() not in OP and m.group(1).upper() not in (
+            "NUM",
+            "EJA",
+            "BNUM",
+            "BIN",
+            "HLT",
+        ):
+            records.append((None, m.group(1), m.group(2).strip()))
+            continue
+        records.append((None, None, line))
+
+    labels: dict[str, int] = {}
+    cursor = 0
+    pending_label: str | None = None
+    layout: list[tuple[int, str, str]] = []
+
+    for org, label, body in records:
+        if org is not None:
+            cursor = org
+        if label:
+            labels[label] = cursor
+        if not body:
+            continue
+        parts = body.split(None, 2)
+        mnem = parts[0].upper()
+        rest = parts[1] if len(parts) > 1 else ""
+        layout.append((cursor, mnem, rest))
+        cursor += 1
+
+    store = [0] * 32
+    first_code: int | None = None
+    for addr, mnem, rest in layout:
+        if addr >= 32:
+            raise ValueError(f"address {addr} >= 32")
+        if mnem == "NUM":
+            store[addr] = to_signed32(_parse_operand(rest.split()[0], labels))
+        elif mnem == "EJA":
+            store[addr] = to_signed32(_parse_operand(rest.split()[0], labels) - 1)
+        elif mnem in OP:
+            op = OP[mnem]
+            arg = _parse_operand(rest.split()[0], labels) if rest else 0
+            store[addr] = enc(op, arg)
+            if first_code is None:
+                first_code = addr
+        else:
+            raise ValueError(f"unknown mnemonic {mnem!r}")
+    if first_code is None:
+        ci = None
+    elif first_code == 0:
+        ci = -1
+    else:
+        ci = first_code - 1
+    return store, ci
+
+
 def parse_snp_text(text: str) -> tuple[list[int], int | None]:
     store = [0] * 32
     first_line: int | None = None

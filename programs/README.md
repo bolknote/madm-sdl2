@@ -132,7 +132,8 @@ binary constants).
 | `nevynuk_hcf989.store` | HCF for **989** | Same listing as blog / `hfr989.ssem`; layout differs from `davidsharp_hfr989.store` |
 | `nevynuk_hcf1.store` | Factor demo (`N = -35`) | `HCF1.ssem` |
 | `nevynuk_hcf2.store` | Euclidean HCF, large constants | `HCF2.ssem` |
-| `nevynuk_turing_longdiv.store` | Turing long division (`A=36`, `B=20`, quotient at `@28`) | From `TuringLongDivision.ssem` / *Computer Architecture* scan; upstream `.ssem` uses `BNUM`, not accepted by their Python assembler |
+| `nevynuk_turing_longdiv.store` | Turing long division (`A=36`, `B=20`, quotient at `@28`) | `TuringLongDivision.ssem`; same 32 words as [pico-baby-if `program.c`](https://github.com/krisjdev/pico-baby-if/blob/main/program.c), [comparch `TuringLongDivision.logisimRAMImage`](https://gitlab.com/charles.fox/comparch/-/blob/main/chapter07/TuringLongDivision.logisimRAMImage), and the **32 LSB-left lines** in Charles Fox, *Computer Architecture* ([dokumen.pub mirror](https://dokumen.pub/computer-architecture-from-the-stone-age-to-the-quantum-age-9781718502864-9781718502871.html) — search “machine code for Turing”); Tiny Tapeout expects **STOP (`0xe0000000`) at line 28** after run |
+| `nevynuk_add.store` | 10 + 5 → **15** in A (`LDN 20`, `SUB 21`, `STO 22`, `LDN 22`, `STOP`) | Mark Stevens / ManchesterBaby.computer sample format (`Add.ssem`) |
 | `nevynuk_jmp_test.store` | JMP self-test | `Factor95.ssem` (misleading name) |
 | `nevynuk_primes.store` | Prime generator | Overlaps `davidsharp_primegen` |
 | `nevynuk_parabola.store` | Parabola plot | Overlaps `davidsharp_diffeqt` |
@@ -165,9 +166,42 @@ Source: [jcla1/gobaby](https://github.com/jcla1/gobaby).
 
 | File | What it does | Relation to existing catalog |
 |------|----------------|------------------------------|
-| `gobaby_factor.store` | Factor 2^18, Joseph Adams listing | Same as `ccs_factorct` |
+| `gobaby_factor.store` | Factor 2^18, Joseph Adams listing | Same as `ccs_factorct` and the [Retrocomputing SE](https://retrocomputing.stackexchange.com/a/2869) / [gobaby `examples/factor.asm`](https://github.com/jcla1/gobaby/blob/main/examples/factor.asm) listing (`gobaby -t -l 27 -p=f`) |
 | `gobaby_primegen.store` | Chainable prime generator | Same as `davidsharp_primegen` |
 | `gobaby_simple_calc.store` | 5 - 3 -> result in line 9 | Unique, 5 steps |
+
+### Andy Bower sim / Python (round 2)
+
+Sources: [manchester-baby-sim](https://github.com/andy-bower/manchester-baby-sim),
+[ManchesterBabyPython](https://github.com/andy-bower/ManchesterBabyPython).
+Regenerate with `python3 ../scripts/convert_round2.py` (numbered `.asm` only;
+skips catalog duplicates).
+
+| File | What it does | Relation to existing catalog |
+|------|----------------|------------------------------|
+| `bower_sim_fibonacci.store` | Fibonacci to index in line 29 (default 46) | David Tarnoff tutorial layout; not the same bytes as `cambridge_fib` |
+| `bower_mpy_jrptest.store` | JRP self-test; stops with **A = 2** | Numbered listing (`JRPTest.asm`); differs from `babyutils_test_jrp` |
+| `bower_mpy_cirollover.store` | CI rollover / STOP exercise | `CIRollover.asm` |
+
+`convert_round2.py` also skips byte-identical copies of `ccs_factorct`,
+`davidsharp_primegen`, `nevynuk_*`, and Turing long division already in
+`nevynuk_turing_longdiv.store`. CCS-style `samples/ssem/tests/*.snp` in the sim
+repo match the existing `ccs_*test.store` set.
+
+### babyutils toolchain tests (round 3)
+
+Source: [andy-bower/babyutils](https://github.com/andy-bower/babyutils) `test/`.
+Regenerate with `python3 ../scripts/convert_round3.py`, which uses
+`parse_babyutils_asm()` (labels, `EJA`, implicit line addresses). Skips
+`macro.asm`, `relative.asm`, `subroutines.asm` (extra syntax), and
+`lddiv.asm` / `lddiv-pic.asm` (same bytes as `nevynuk_turing_longdiv`).
+
+| File | What it does | Notes |
+|------|----------------|-------|
+| `babyutils_test_jmp.store` | **JMP** via `EJA` trampoline (`test-jmp.asm`) | Check words at lines 28-31 |
+| `babyutils_test_jrp.store` | **JRP** via `EJA` (`test-jrp.asm`) | Different layout from `bower_mpy_jrptest` |
+| `babyutils_test_count31.store` | Count down with **SKN** / **HLT** at 2^31 wrap | `test-count31.asm` |
+| `babyutils_test_count_forever.store` | Infinite subtract loop (no **HLT**) | `test-count-forever.asm` |
 
 ### Rust `baby-emulator` / SSEMBabyEmulator
 
@@ -190,6 +224,11 @@ source does not build as-is because of format-string typos.
 
 | Source | Status |
 |--------|--------|
+| [krisjdev/pico-baby-if](https://github.com/krisjdev/pico-baby-if) | `program.c` Turing long division RAM = `nevynuk_turing_longdiv.store`; Tiny Tapeout test expects **0xe0000000** at store line **28** after run (initial image has `0` there) |
+| [charles.fox/comparch](https://gitlab.com/charles.fox/comparch) ch07 | `TuringLongDivision.asm`, `babyAssemble.py`, `TuringLongDivision.logisimRAMImage` — same 32 words as above |
+| Fox book machine-code dump | dokumen.pub HTML embeds 32×32-bit lines after “machine code for Turing”; verified = `nevynuk_turing_longdiv` (`scripts/upstream/fox-book/TuringLongDivision.machine.txt`) |
+| [Retrocomputing SE #2869](https://retrocomputing.stackexchange.com/a/2869) | Full `factor.asm` = `gobaby_factor` / `ccs_factorct` (cached as `scripts/upstream/retro-factor/factor.asm`) |
+| Mark Stevens blog sample | `Add.ssem` (10+5→15) = `nevynuk_add.store`; `hfr989.ssem` = `nevynuk_hcf989` (layout differs from `davidsharp_hfr989`) |
 | [open-simh/simh](https://github.com/open-simh/simh) | `SSEM/` supports `LOAD`/`DUMP` of `.st` store files and mnemonic entry, but ships no sample `.st` programs |
 | [diy-ic/tt-manchester-baby](https://github.com/diy-ic/tt-manchester-baby) | `test/test.py` init RAM is Turing long division, identical to `nevynuk_turing_longdiv.store` |
 | [EMF Manchester Baby](https://em.ulat.es/machines/ManchesterBaby/) | HTTPS fetch failed here; retry manually for embedded JS demos |
@@ -259,6 +298,11 @@ python3 convert_program_hunt.py
 python3 convert_nevynuk.py
 python3 convert_ccs_diagnostic.py
 python3 convert_more_sources.py
+python3 convert_round2.py
+python3 convert_round3.py
+python3 convert_fox_retro.py
 ```
 
 See `../scripts/README.md` for script-specific notes.
+
+The catalog currently ships **70** `.store` files (32 lines each).

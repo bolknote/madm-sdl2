@@ -109,6 +109,20 @@ clone_if_missing "$UP/comparch/comparch" https://gitlab.com/charles.fox/comparch
 clone_if_missing "$UP/bower-extra/manchester-baby-sim" https://github.com/andy-bower/manchester-baby-sim.git
 clone_if_missing "$UP/bower-extra/ManchesterBabyPython" https://github.com/andy-bower/ManchesterBabyPython.git
 
+echo "== Fox book HTML + Retrocomputing factor listing =="
+FOX="$UP/fox-book"
+mkdir -p "$FOX"
+if [ ! -f "$FOX/fox.html" ]; then
+  curl -fsSL -L -o "$FOX/fox.html" \
+    'https://dokumen.pub/computer-architecture-from-the-stone-age-to-the-quantum-age-9781718502864-9781718502871.html'
+fi
+RETRO="$UP/retro-factor"
+mkdir -p "$RETRO"
+if [ ! -f "$RETRO/factor.html" ]; then
+  curl -fsSL -L -o "$RETRO/factor.html" \
+    'https://retrocomputing.stackexchange.com/questions/2866/does-anyone-have-the-source-code-of-an-early-program-written-in-assembly/2869'
+fi
+
 cd "$UP"
 echo "Done. Cache: $UP and $DS (ssem.jar at $DS/unpacked/ssem/ssem.jar)"
 ls -la "$UP" "$DS" "$HASE" 2>/dev/null | head -20
