@@ -1,0 +1,36 @@
+# emuStudio — Highest common factor
+# https://github.com/emustudio/emuStudio/tree/develop/plugins/compiler/as-ssem/src/main/examples/highest-common-factor.ssem
+#
+# ci-start 0
+@0 1
+@1 16414
+@2 24605
+@3 16415
+@4 24607
+@5 16415
+@6 24606
+@7 16413
+@8 32798
+@9 49152
+@10 8219
+@11 32799
+@12 24607
+@13 32796
+@14 49152
+@15 0
+@16 57344
+@17 0
+@18 0
+@19 0
+@20 0
+@21 0
+@22 0
+@23 0
+@24 0
+@25 0
+@26 0
+@27 -3
+@28 2
+@29 0
+@30 0x12b9b0a1
+@31 0x1033c4d7

@@ -29,9 +29,31 @@ unzip -q -o wmadm.zip -d wmadm_unpack 2>/dev/null || true
 cd "$UP"
 
 echo "== Cambridge teaching zips =="
+CAMD="$UP/cambridge-deep"
+mkdir -p "$CAMD"
+cd "$CAMD"
 for z in JavaBaby.zip SVBaby.zip BabySNPtoV.zip; do
   curl -fsSL -O "https://www.cl.cam.ac.uk/teaching/0910/ECAD%2BArch/files/$z"
+  unzip -q -o "$z" -d "${z%.zip}" 2>/dev/null || true
 done
+cd "$UP"
+
+echo "== emuStudio as-ssem (full examples tree) =="
+ESF="$UP/emustudio-full"
+mkdir -p "$ESF"
+if [ ! -d "$ESF/emuStudio/.git" ]; then
+  git clone --depth 1 --filter=blob:none --sparse https://github.com/emustudio/emuStudio.git "$ESF/emuStudio"
+  git -C "$ESF/emuStudio" sparse-checkout set plugins/compiler/as-ssem
+fi
+
+echo "== Historic Simulations SSEM (Wayback zip + manual) =="
+HIST="$UP/historicsimulations"
+mkdir -p "$HIST"
+if [ ! -f "$HIST/ssem.zip" ]; then
+  curl -fsSL -L -o "$HIST/ssem.zip" \
+    'https://web.archive.org/web/20160617145948/http://historicsimulations.com/ssem.zip' || true
+  unzip -q -o "$HIST/ssem.zip" -d "$HIST/unpack" 2>/dev/null || true
+fi
 
 echo "== MAME software-list metadata =="
 curl -fsSL -O 'https://raw.githubusercontent.com/mamedev/mame/master/hash/ssem_quik.xml'

@@ -1,0 +1,36 @@
+# emuStudio — Nightmare animation
+# https://github.com/emustudio/emuStudio/tree/develop/plugins/compiler/as-ssem/src/main/examples/nightmare.ssem
+#
+# ci-start 0
+@0 0x20822560
+@1 16409
+@2 24577
+@3 49152
+@4 32791
+@5 32769
+@6 32769
+@7 32769
+@8 24601
+@9 16405
+@10 49152
+@11 32790
+@12 32791
+@13 24597
+@14 32773
+@15 24584
+@16 32768
+@17 24577
+@18 16405
+@19 24597
+@20 24
+@21 6
+@22 7
+@23 -1
+@24 0
+@25 0x40f8000
+@26 0xa104000
+@27 0x4144000
+@28 0x1c105f80
+@29 0x40f8040
+@30 0x4011e78
+@31 0xa07fffc

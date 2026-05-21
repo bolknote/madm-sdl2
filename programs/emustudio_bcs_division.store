@@ -1,0 +1,36 @@
+# emuStudio — BCS division example
+# https://github.com/emustudio/emuStudio/tree/develop/plugins/compiler/as-ssem/src/main/examples/bcs-division.ssem
+#
+# ci-start 0
+@0 0x1e00000
+@1 16413
+@2 24603
+@3 16412
+@4 24602
+@5 16410
+@6 32797
+@7 24604
+@8 49152
+@9 25
+@10 32795
+@11 24607
+@12 57344
+@13 16414
+@14 32792
+@15 24606
+@16 16414
+@17 24606
+@18 23
+@19 0x200000
+@20 0x200000
+@21 0x200000
+@22 0x3c00000
+@23 2
+@24 1
+@25 12
+@26 0
+@27 0
+@28 666
+@29 42
+@30 0
+@31 0

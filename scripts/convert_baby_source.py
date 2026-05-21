@@ -104,7 +104,7 @@ def parse_asm_text(text: str) -> tuple[list[int], int | None]:
     store = [0] * 32
     first_code_line: int | None = None
     for raw in text.strip().splitlines():
-        line = raw.split("--")[0].strip()
+        line = raw.split("--")[0].split(";")[0].strip()
         if not line or re.fullmatch(r"\d+", line):
             continue
         m = re.match(r"^(\d+)\s*:?\s*(\w+)(?:\s+(.+))?$", line)

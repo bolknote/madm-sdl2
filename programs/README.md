@@ -167,15 +167,34 @@ with `python3 ../scripts/convert_more_sources.py`.
 ### emuStudio
 
 Source: [emuStudio](https://github.com/emustudio/emuStudio) `as-ssem` (`.ssem` listings, `.bin` output).
-Regenerate with `python3 ../scripts/convert_emustudio_extra.py`. emuStudio’s
-[Software for SSEM](https://www.emustudio.org/emustudio-documentation/ssem-software/)
+Regenerate with `python3 ../scripts/convert_emustudio_extra.py` and
+`python3 ../scripts/convert_round7.py` (full `src/main/examples/*.ssem` tree).
+emuStudio’s [Software for SSEM](https://www.emustudio.org/emustudio-documentation/ssem-software/)
 page also points at CCS, Historic Simulations, and gobaby `examples/` as
 reference program collections.
 
 | File | What it does | Notes |
 |------|----------------|-------|
-| `emustudio_ssem_animation.store` | Self-modifying CRT animation of the text **SSEM** | `plugins/compiler/as-ssem/.../ssem.ssem`; rewrites lines 1 and 7; bitmap data on lines 24–31 |
-| `emustudio_add_5_3.store` | **5 + 3 → 8** in A and store line 9 | Documentation listing (`LDN`/`SUB`/`STO` negation trick); 6 steps |
+| `emustudio_ssem_animation.store` | Self-modifying CRT animation of the text **SSEM** | `ssem.ssem` |
+| `emustudio_add_5_3.store` | **5 + 3 → 8** (operands in lines 7–8) | Docs listing |
+| `emustudio_addition.store` | **5 + 3** (operands in lines 29–30) | `addition.ssem` — different line layout |
+| `emustudio_highest_factor.store` | Highest proper factor | Not byte-identical to `kilburn_july48` |
+| `emustudio_highest_common_factor.store` | HCF | |
+| `emustudio_bcs_division.store` | BCS division | |
+| `emustudio_dec_till_negative.store` | Count-down / dec until negative | |
+| `emustudio_medclock.store` | Medclock | |
+| `emustudio_nightmare.store` | Nightmare | |
+| `emustudio_noodle_timer.store` | Noodle timer | |
+| `emustudio_square_root.store` | Square root | |
+| `emustudio_the_fraj.store` | The Fraj | |
+
+Skipped as duplicates: `primegen.ssem`, `virpet.ssem`, `parabola.ssem`.
+
+### Cambridge SVBaby / JavaBaby (deep)
+
+[SVBaby.zip](https://www.cl.cam.ac.uk/teaching/0910/ECAD+Arch/files/SVBaby.zip): switches **SW15–17** select
+`progNIGHT` / `progNOODLE` / `progFIB` (see `reference/cambridge_svbaby_switch_map.md`).
+All seven `.SNP` files in JavaBaby and BabySNPtoV match existing catalog bytes; `progPARABOLA.sv` is not switch-selected.
 
 ### gobaby
 
@@ -320,7 +339,8 @@ hooks the `ssem_quik` software list.
 | David Sharp `baby.zip` | [baby.zip](https://www.davidsharp.com/baby/baby.zip) | Same 12 plus PDF docs |
 | David Sharp `ssem.zip` / `src.zip` | [davidsharp.com/baby](https://www.davidsharp.com/baby/) | `ssem.jar` menu: Baby9, diffeqt, noodletimer, primegen, virpet |
 | Manchester `m1sim.zip` | [CCS SSEM](https://www.cs.man.ac.uk/CCS/Archive/simulators/SSEM/) | `FACTOR` plus DOS simulator |
-| Cambridge `JavaBaby.zip` etc. | `.../ECAD+Arch/files/` (0910 and 1011) | 7 SNPs: FIB plus renamed competition snapshots |
+| Cambridge `JavaBaby.zip` / `SVBaby.zip` / `BabySNPtoV.zip` | `scripts/upstream/cambridge-deep/` | 7 SNPs + 3 switch-selected `prog*.sv`; all match catalog |
+| Historic Simulations | [Wayback `ssem.zip`](https://web.archive.org/web/20160617145948/http://historicsimulations.com/ssem.zip) | `SSEM.txt` manual + `ManchesterBaby.exe`; no separate program files |
 | Computer50 mirror | [prog98](https://curation.cs.manchester.ac.uk/computer50/www.computer50.org/mark1/prog98/) | About 128 entries described; no bulk download |
 | Digital60 2008 contest | `.../Digital60/Digital60-AliceCompetition/` | Live URL 404; Wayback prize pages link missing entry zips; CDX has the same David Sharp emulator zips |
 | CCS SSEM emulators | [computerconservationsociety.org/software/ssem/](https://www.computerconservationsociety.org/software/ssem/) | `madm.zip` = Lee Wittenberg source; `wmadm.zip` = Windows build + `factor.mdm` (July 1948 factor = `kilburn_july48`) and `sample.mdm` (format demo only); `m1sim.zip` = Andy Molyneux 1996 DOS sim + `FACTOR.SNP` |
@@ -361,11 +381,12 @@ python3 convert_round4.py
 python3 convert_babybaby.py
 python3 convert_round5.py
 python3 convert_round6.py
+python3 convert_round7.py
 ```
 
 See `../scripts/README.md` for script-specific notes.
 
-The catalog currently ships **77** `.store` files (32 lines each).
+The catalog currently ships **87** `.store` files (32 lines each).
 
 ## Non-Baby architectures (separate tree)
 
