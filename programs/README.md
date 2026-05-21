@@ -160,9 +160,22 @@ with `python3 ../scripts/convert_more_sources.py`.
 | `babyping_intdiv.store` | Integer division | Same as `davidsharp_intdiv` |
 | `babyping_clock.store` | Clock display | Same as `davidsharp_medclock` |
 
+### emuStudio
+
+Source: [emuStudio](https://github.com/emustudio/emuStudio) `as-ssem` (`.ssem` listings, `.bin` output).
+Regenerate with `python3 ../scripts/convert_emustudio_extra.py`. emuStudio’s
+[Software for SSEM](https://www.emustudio.org/emustudio-documentation/ssem-software/)
+page also points at CCS, Historic Simulations, and gobaby `examples/` as
+reference program collections.
+
+| File | What it does | Notes |
+|------|----------------|-------|
+| `emustudio_ssem_animation.store` | Self-modifying CRT animation of the text **SSEM** | `plugins/compiler/as-ssem/.../ssem.ssem`; rewrites lines 1 and 7; bitmap data on lines 24–31 |
+| `emustudio_add_5_3.store` | **5 + 3 → 8** in A and store line 9 | Documentation listing (`LDN`/`SUB`/`STO` negation trick); 6 steps |
+
 ### gobaby
 
-Source: [jcla1/gobaby](https://github.com/jcla1/gobaby).
+Source: [jcla1/gobaby](https://github.com/jcla1/gobaby) `examples/` (also cited by emuStudio docs).
 
 | File | What it does | Relation to existing catalog |
 |------|----------------|------------------------------|
@@ -301,8 +314,9 @@ python3 convert_more_sources.py
 python3 convert_round2.py
 python3 convert_round3.py
 python3 convert_fox_retro.py
+python3 convert_emustudio_extra.py
 ```
 
 See `../scripts/README.md` for script-specific notes.
 
-The catalog currently ships **70** `.store` files (32 lines each).
+The catalog currently ships **72** `.store` files (32 lines each).

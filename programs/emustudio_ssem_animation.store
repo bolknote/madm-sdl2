@@ -1,0 +1,36 @@
+# emuStudio — self-modifying “SSEM” CRT animation
+# https://github.com/emustudio/emuStudio/blob/develop/plugins/compiler/as-ssem/src/main/examples/ssem.ssem
+#
+# ci-start 0
+@0 0
+@1 16407
+@2 49152
+@3 32786
+@4 24597
+@5 16405
+@6 32789
+@7 24599
+@8 16385
+@9 24597
+@10 16405
+@11 32788
+@12 49152
+@13 16403
+@14 24577
+@15 32790
+@16 24583
+@17 0
+@18 1
+@19 0x47ffbfe9
+@20 -134217729
+@21 0
+@22 -8192
+@23 0x7fffffff
+@24 0x8bcc6
+@25 0xd8529
+@26 0xa8421
+@27 0x89cc6
+@28 0x88508
+@29 0x88529
+@30 0x8bcc6
+@31 0x7fffffff

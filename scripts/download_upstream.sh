@@ -109,6 +109,23 @@ clone_if_missing "$UP/comparch/comparch" https://gitlab.com/charles.fox/comparch
 clone_if_missing "$UP/bower-extra/manchester-baby-sim" https://github.com/andy-bower/manchester-baby-sim.git
 clone_if_missing "$UP/bower-extra/ManchesterBabyPython" https://github.com/andy-bower/ManchesterBabyPython.git
 
+echo "== emuStudio SSEM examples =="
+EMU="$UP/emustudio"
+mkdir -p "$EMU"
+for f in ssem.ssem; do
+  curl -fsSL -o "$EMU/$f" \
+    "https://raw.githubusercontent.com/emustudio/emuStudio/develop/plugins/compiler/as-ssem/src/main/examples/$f"
+done
+# add_5_3.ssem is maintained in-repo from emuStudio documentation
+
+echo "== gobaby examples (curl mirror) =="
+GBE="$UP/gobaby-examples"
+mkdir -p "$GBE"
+for f in simple_calc factor primegen; do
+  curl -fsSL -o "$GBE/$f.asm" \
+    "https://raw.githubusercontent.com/jcla1/gobaby/master/examples/$f.asm"
+done
+
 echo "== Fox book HTML + Retrocomputing factor listing =="
 FOX="$UP/fox-book"
 mkdir -p "$FOX"
