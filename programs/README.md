@@ -46,7 +46,7 @@ python3 ../examples/manchester_baby/madm_sim.py -f programs/cambridge_fib.store 
 
 | File | What it does | Source / note |
 |------|----------------|---------------|
-| `kilburn_july48.store` | Highest proper factor, amended **18 July 1948** listing; reliability run **21 June 1948** | Geoff Tootill notebook; [Computer50 notes](https://curation.cs.manchester.ac.uk/computer50/www.computer50.org/mark1/notes.html#reconsprog1); Lee Wittenberg MADM demo |
+| `kilburn_july48.store` | Highest proper factor, amended **18 July 1948** listing; reliability run **21 June 1948** | Geoff Tootill notebook; [Computer50 notes](https://curation.cs.manchester.ac.uk/computer50/www.computer50.org/mark1/notes.html#reconsprog1); Lee Wittenberg MADM demo; same bytes as [CCS `wmadm.zip`](https://www.computerconservationsociety.org/software/ssem/wmadm.zip) `factor.mdm` and `m1sim_factor` |
 | `m1sim_factor.store` | Kilburn-style factorization demo | `FACTOR.SNP` in [Manchester CCS m1sim.zip](https://www.cs.man.ac.uk/CCS/Archive/simulators/SSEM/m1sim.zip), Andy Molyneux M1SIM, 1996 |
 | `ccs_factorct.store` | Full factor-run layout from volunteer guide (`FACTORCT.SNP` text) | [CCS Technical Introduction v4.0 PDF](https://computerconservationsociety.org/ssemvolunteers/volunteers/A%20Technical%20Introduction%20To%20Programming%20the%20Baby%20v4.0.pdf) |
 | `ccs_prog1_989.store` | Same code as `ccs_factorct.store` with `@23=-989`, `@24=988` | About 20k steps |
@@ -128,12 +128,11 @@ binary constants).
 
 | File | What it does | Notes |
 |------|----------------|-------|
-| `nevynuk_add.store` | 10 + 5 -> A = 15 | Blog “small test” |
-| `nevynuk_hcf989.store` | HCF for **989** | Same listing as blog / `hfr989.ssem`; layout differs from `davidsharp_hfr989.store` |
+| `nevynuk_add.store` | 10 + 5 -> **15** in A (`LDN 20`, `SUB 21`, `STO 22`, `LDN 22`, `STOP`) | Mark Stevens / ManchesterBaby.computer sample format (`Add.ssem`) |
+| `nevynuk_hcf989.store` | HCF for **989** | Mark Stevens page / `hfr989.ssem`; same bytes as `davidsharp_hfr989.store` |
 | `nevynuk_hcf1.store` | Factor demo (`N = -35`) | `HCF1.ssem` |
 | `nevynuk_hcf2.store` | Euclidean HCF, large constants | `HCF2.ssem` |
-| `nevynuk_turing_longdiv.store` | Turing long division (`A=36`, `B=20`, quotient at `@28`) | `TuringLongDivision.ssem`; same 32 words as [pico-baby-if `program.c`](https://github.com/krisjdev/pico-baby-if/blob/main/program.c), [comparch `TuringLongDivision.logisimRAMImage`](https://gitlab.com/charles.fox/comparch/-/blob/main/chapter07/TuringLongDivision.logisimRAMImage), and the **32 LSB-left lines** in Charles Fox, *Computer Architecture* ([dokumen.pub mirror](https://dokumen.pub/computer-architecture-from-the-stone-age-to-the-quantum-age-9781718502864-9781718502871.html) — search “machine code for Turing”); Tiny Tapeout expects **STOP (`0xe0000000`) at line 28** after run |
-| `nevynuk_add.store` | 10 + 5 → **15** in A (`LDN 20`, `SUB 21`, `STO 22`, `LDN 22`, `STOP`) | Mark Stevens / ManchesterBaby.computer sample format (`Add.ssem`) |
+| `nevynuk_turing_longdiv.store` | Turing long division (`A=36`, `B=20`, quotient at `@28`) | `TuringLongDivision.ssem`; see note below |
 | `nevynuk_jmp_test.store` | JMP self-test | `Factor95.ssem` (misleading name) |
 | `nevynuk_primes.store` | Prime generator | Overlaps `davidsharp_primegen` |
 | `nevynuk_parabola.store` | Parabola plot | Overlaps `davidsharp_diffeqt` |
@@ -141,6 +140,11 @@ binary constants).
 | `nevynuk_intdiv.store` | Integer division | Overlaps `davidsharp_intdiv` |
 | `nevynuk_clock.store` | Clock | Overlaps `davidsharp_medclock` |
 | `nevynuk_3minutes.store` | 3-minute timer | Overlaps `davidsharp_noodletimer` |
+
+Turing long-division note: `nevynuk_turing_longdiv.store` matches the 32-word
+RAM images in pico-baby-if, comparch, and the Charles Fox book dump. Tiny
+Tapeout's runtime test expects **STOP (`0xe0000000`) at line 28** after
+execution; the initial image has `0` there.
 
 The C++/NuttX tree also ships the same `.ssem` files under
 `Source/CPP/.../SSEMApps/`.
@@ -237,9 +241,8 @@ source does not build as-is because of format-string typos.
 
 | Source | Status |
 |--------|--------|
-| [krisjdev/pico-baby-if](https://github.com/krisjdev/pico-baby-if) | `program.c` Turing long division RAM = `nevynuk_turing_longdiv.store`; Tiny Tapeout test expects **0xe0000000** at store line **28** after run (initial image has `0` there) |
-| [charles.fox/comparch](https://gitlab.com/charles.fox/comparch) ch07 | `TuringLongDivision.asm`, `babyAssemble.py`, `TuringLongDivision.logisimRAMImage` — same 32 words as above |
-| Fox book machine-code dump | dokumen.pub HTML embeds 32×32-bit lines after “machine code for Turing”; verified = `nevynuk_turing_longdiv` (`scripts/upstream/fox-book/TuringLongDivision.machine.txt`) |
+| [krisjdev/pico-baby-if](https://github.com/krisjdev/pico-baby-if) | Turing long-division RAM matches `nevynuk_turing_longdiv.store` |
+| [charles.fox/comparch](https://gitlab.com/charles.fox/comparch) ch07 / Fox book dump | Same Turing long-division image; see NevynUK note above |
 | [Retrocomputing SE #2869](https://retrocomputing.stackexchange.com/a/2869) | Full `factor.asm` = `gobaby_factor` / `ccs_factorct` (cached as `scripts/upstream/retro-factor/factor.asm`) |
 | Mark Stevens blog sample | `Add.ssem` (10+5→15) = `nevynuk_add.store`; `hfr989.ssem` = `nevynuk_hcf989` (layout differs from `davidsharp_hfr989`) |
 | [open-simh/simh](https://github.com/open-simh/simh) | `SSEM/` supports `LOAD`/`DUMP` of `.st` store files and mnemonic entry, but ships no sample `.st` programs |
@@ -287,7 +290,8 @@ hooks the `ssem_quik` software list.
 | Cambridge `JavaBaby.zip` etc. | `.../ECAD+Arch/files/` (0910 and 1011) | 7 SNPs: FIB plus renamed competition snapshots |
 | Computer50 mirror | [prog98](https://curation.cs.manchester.ac.uk/computer50/www.computer50.org/mark1/prog98/) | About 128 entries described; no bulk download |
 | Digital60 2008 contest | `.../Digital60/Digital60-AliceCompetition/` | Live URL 404; Wayback prize pages link missing entry zips; CDX has the same David Sharp emulator zips |
-| CCS SSEM emulators | [computerconservationsociety.org/emu/ssem/](https://www.computerconservationsociety.org/emu/ssem/) | `madm.zip` = Lee Wittenberg source; `wmadm.zip` = Windows build plus `.mdm` samples |
+| CCS SSEM emulators | [computerconservationsociety.org/software/ssem/](https://www.computerconservationsociety.org/software/ssem/) | `madm.zip` = Lee Wittenberg source; `wmadm.zip` = Windows build + `factor.mdm` (July 1948 factor = `kilburn_july48`) and `sample.mdm` (format demo only); `m1sim.zip` = Andy Molyneux 1996 DOS sim + `FACTOR.SNP` |
+| Mark Stevens page listings | ManchesterBaby.computer | Minimal add (10+5→15) = `nevynuk_add`; HCF/989 = `nevynuk_hcf989` |
 | CCS diagnostic PDF | [volunteers analysis PDF](https://computerconservationsociety.org/ssemvolunteers/volunteers/Baby%20Functions%20Diagnostic%20Test%20Files%20-%20Analysis.1.0.pdf) | Nine `*Test.snp` programs -> `ccs_*test.store` |
 
 Not found as downloadable `.snp` files: `PROG1.SNP` (989 demo, described in a
@@ -315,6 +319,7 @@ python3 convert_round2.py
 python3 convert_round3.py
 python3 convert_fox_retro.py
 python3 convert_emustudio_extra.py
+python3 convert_ccs_mdm.py
 ```
 
 See `../scripts/README.md` for script-specific notes.

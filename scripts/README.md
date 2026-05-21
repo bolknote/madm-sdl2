@@ -18,6 +18,7 @@ python3 convert_round2.py         # Bower sim/Python asm; skips label/EJA babyut
 python3 convert_round3.py         # babyutils labeled asm (EJA); pico/tt cross-check
 python3 convert_fox_retro.py      # Fox book 32-bit dump, Retro SE / gobaby factor.asm
 python3 convert_emustudio_extra.py  # emuStudio ssem.ssem + add 5+3; gobaby dup check
+python3 convert_ccs_mdm.py          # wmadm factor.mdm (dup kilburn_july48 if unchanged)
 python3 visual_check.py             # PNG previews → upstream/_visual_check/
 ./run_sim.sh ../programs/cambridge_fib.store
 ```

@@ -18,6 +18,16 @@ done
 echo "== Manchester CCS m1sim =="
 curl -fsSL -O 'https://www.cs.man.ac.uk/CCS/Archive/simulators/SSEM/m1sim.zip'
 
+echo "== CCS SSEM emulator page (madm / wmadm / m1sim) =="
+CCSEMU="$UP/ccs-emu"
+mkdir -p "$CCSEMU"
+cd "$CCSEMU"
+for f in madm.zip wmadm.zip m1sim.zip; do
+  curl -fsSL -L -o "$f" "https://www.computerconservationsociety.org/software/ssem/$f"
+done
+unzip -q -o wmadm.zip -d wmadm_unpack 2>/dev/null || true
+cd "$UP"
+
 echo "== Cambridge teaching zips =="
 for z in JavaBaby.zip SVBaby.zip BabySNPtoV.zip; do
   curl -fsSL -O "https://www.cl.cam.ac.uk/teaching/0910/ECAD%2BArch/files/$z"
