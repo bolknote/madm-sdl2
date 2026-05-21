@@ -39,8 +39,8 @@ Any key while running stops the machine (same quirk as the original simulator).
 include/        madm.h (C17 types), display.h, proto.h, graphics.h, keyboard.h
 src/            CPU, memory, UI logic
 platform/macos/ SDL2 graphics and keyboard
-programs/       .store program images (see programs/README.md)
-scripts/        optional tools to regenerate .store from upstream archives
+programs/       .store images + README + SOURCES.md
+scripts/        optional; not needed to run the simulator
 ```
 
 Built with **C17** (`-std=c17 -pedantic -Wall -Wextra`). Machine state uses
@@ -52,7 +52,7 @@ Built with **C17** (`-std=c17 -pedantic -Wall -Wextra`). Machine state uses
 - 16-bit instructions: 3-bit opcode, 5-bit address; display is LSB-left binary
 - `programs/kilburn_july48.store`: highest-factor routine from *Early British Computers* / Tootill notebook
 
-See `programs/README.md` for the program catalog, sources, and store file format.
+See `programs/README.md` (catalog) and `programs/SOURCES.md` (links to originals).
 
 ## Credits and license status
 

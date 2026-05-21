@@ -1,33 +1,10 @@
-# MADM maintainer scripts
+# Maintainer scripts (optional)
 
-Tools to refresh `programs/*.store` from upstream archives. Cache goes under `scripts/upstream/` (gitignored).
+Not required to build or run MADM. Used only to regenerate `programs/*.store` from upstream archives.
 
 ```bash
-cd MADM.English/scripts
-./download_upstream.sh
-python3 convert_baby_source.py      # davidsharp_*.store (12)
-python3 convert_extra_sources.py    # cambridge_fib, m1sim_factor
-# unpack ssem.zip → upstream/davidsharp_zips, then:
-python3 convert_davidsharp_zips.py  # davidsharp_baby9.store
-python3 convert_ccs_diagnostic.py   # ccs_*test.store (from CCS PDF via pdftotext)
-python3 convert_program_hunt.py     # HASE, JsSSEM fibo, Rosetta, CCS FACTORCT (needs upstream/hase/)
-python3 convert_nevynuk.py          # NevynUK *.ssem (needs upstream/nevynuk/ManchesterBaby)
-python3 convert_extra_hunt.py       # BabyPing, baby-emulator examples, ccs_prog1_989
-python3 convert_more_sources.py   # BabyPing 6× .ssem, gobaby examples/*.asm
-python3 convert_round2.py         # Bower sim/Python asm; skips label/EJA babyutils
-python3 convert_round3.py         # babyutils labeled asm (EJA); pico/tt cross-check
-python3 convert_fox_retro.py      # Fox book 32-bit dump, Retro SE / gobaby factor.asm
-python3 convert_emustudio_extra.py  # emuStudio ssem.ssem + add 5+3; gobaby dup check
-python3 convert_ccs_mdm.py          # wmadm factor.mdm (dup kilburn_july48 if unchanged)
-python3 convert_round4.py         # BlackIce multiply, babyutils MADD2 README
-python3 convert_babybaby.py       # BabyBaby Programs.coe (slider BABY, primegen, diffeqt)
-python3 convert_round5.py         # C88 → ../ssem-inspired/c88/*.c88ram (not .store)
-python3 convert_round6.py         # Rust countdown ASM, BlackIce hex/disasm, Mark Stevens refs
-python3 convert_round7.py         # emuStudio as-ssem examples; Cambridge SV map doc
-python3 convert_round8.py         # Cambridge SV reference SNPs; LAYER6_HARVEST.md
-python3 convert_round9.py         # Layer 7: babyutils/Fox/retro refs (no new stores)
-python3 convert_round10.py        # Layer 8: Madrona, ssemref A2.x, +5 stores
-python3 convert_round11.py        # Layer 9: CCS progref + progref mini-tests (+8 stores)
-python3 visual_check.py             # PNG previews → upstream/_visual_check/
-./run_sim.sh ../programs/cambridge_fib.store
+./download_upstream.sh   # fills scripts/upstream/ (gitignored)
+python3 convert_*.py     # see each script’s header
 ```
+
+Program catalog and source URLs: `../programs/README.md` and `../programs/SOURCES.md`.

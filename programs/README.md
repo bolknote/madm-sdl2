@@ -1,23 +1,19 @@
 # Programs for MADM
 
-Williams-tube store images for the Manchester Mark I prototype / Manchester
-Baby / SSEM simulator. Each `.store` file is a 32-line, 32-bit memory snapshot;
-bits are displayed least-significant bit first, as on the original tube display.
+**100** Williams-tube `.store` files: 32 lines × 32 bits, least-significant bit first (original CRT layout).
 
-## Quick start
-
-Run a store image in the SDL simulator:
+## Run
 
 ```bash
 cd ..   # MADM.English
 make
-./madm -f programs/davidsharp_primegen.store
 ./madm -f programs/kilburn_july48.store
+./madm -f programs/davidsharp_primegen.store
 ```
 
-Press **Enter** to run and **s** to single-step.
+**Enter** — run · **s** — step · arrows + space — edit bits · **Esc** — quit.
 
-Run the Python emulator without a window:
+Headless check:
 
 ```bash
 python3 ../examples/manchester_baby/madm_sim.py -f programs/cambridge_fib.store --run --dump
@@ -25,420 +21,46 @@ python3 ../examples/manchester_baby/madm_sim.py -f programs/cambridge_fib.store 
 
 ## Store format
 
-- `@N value` loads `value` into store line `N` (`0` to `31`).
-- Lines without `@N` are loaded sequentially.
-- `# ci-start -1` sets CI to `-1` after loading, so the first fetch executes line `0`.
-- `#` starts a comment line; values may be decimal, signed decimal, or `0x` hex.
+- `@N value` — load line `N` (0–31); decimal, signed, or `0x` hex
+- `# ci-start -1` — first executed instruction is line `0`
+- Each file’s header comments name the program and often the source URL
 
-## Suggested first runs
-
-| File | Why start here |
-|------|----------------|
-| `kilburn_july48.store` | The historical highest-factor routine bundled with the original MADM lineage |
-| `davidsharp_primegen.store` | Interactive prime generator; restart after each STOP |
-| `cambridge_fib.store` | Short Fibonacci run with an easy numeric check |
-| `ccs_all1test.store` | Compact diagnostic covering all opcodes |
-| `show67.store` | Local visual demo that draws `67` after execution |
-| `progref_test_ldn_sto_sub.store` | Short LDN/SUB/STO add (4+2→6) from CCS progref |
-| `madrona_sqrt.store` | Square root by repeated odd subtraction (Hilpert) |
-
-## Catalog
-
-**100** Williams-tube `.store` images in this directory (32 lines × 32 bits each).
-Regenerate subsets with `../scripts/convert_round*.py` — see [Regenerating](#regenerating).
-
-### Historical and reference programs
-
-| File | What it does | Source / note |
-|------|----------------|---------------|
-| `kilburn_july48.store` | Highest proper factor, amended **18 July 1948** listing; reliability run **21 June 1948** | Geoff Tootill notebook; [Computer50 notes](https://curation.cs.manchester.ac.uk/computer50/www.computer50.org/mark1/notes.html#reconsprog1); Lee Wittenberg MADM demo; same bytes as [CCS `wmadm.zip`](https://www.computerconservationsociety.org/software/ssem/wmadm.zip) `factor.mdm` and `m1sim_factor` |
-| `m1sim_factor.store` | Kilburn-style factorization demo | `FACTOR.SNP` in [Manchester CCS m1sim.zip](https://www.cs.man.ac.uk/CCS/Archive/simulators/SSEM/m1sim.zip), Andy Molyneux M1SIM, 1996 |
-| `ccs_factorct.store` | Full factor-run layout from volunteer guide (`FACTORCT.SNP` text) | [CCS Technical Introduction v4.0 PDF](https://computerconservationsociety.org/ssemvolunteers/volunteers/A%20Technical%20Introduction%20To%20Programming%20the%20Baby%20v4.0.pdf) |
-| `ccs_prog1_989.store` | Same code as `ccs_factorct.store` with `@23=-989`, `@24=988` | About 20k steps |
-| `cambridge_fib.store` | Fibonacci sequence | `FIB.SNP` in [Cambridge JavaBaby.zip](https://www.cl.cam.ac.uk/teaching/0910/ECAD+Arch/files/JavaBaby.zip), Simon Moore lectures |
-| `davidsharp_baby9.store` | Marquee display from a 2008 photo-realistic simulator example | `Baby9.snp` in [ssem.zip](https://www.davidsharp.com/baby/ssem.zip) / [src.zip](https://www.davidsharp.com/baby/src.zip); related to `slide9.snp` but not identical |
-
-### Computer 50 competition / David Sharp archive
-
-Converted from [David Sharp program SVN](https://davidsharp.com/publicsvn/baby/source/com/davidsharp/baby/program/).
-These are the same 12 programs listed by MAME as `ssem_quik`.
-
-| File | What it does | Author / note | Upstream |
-|------|----------------|---------------|----------|
-| `davidsharp_noodletimer.store` | 3-minute noodle timer | Yasuaki Watanabe, winner | `noodletimer.snp` |
-| `davidsharp_primegen.store` | Prime generator; restart after each STOP | Bas Wijnen, runner-up | `primegen.asm` |
-| `davidsharp_medclock.store` | “Medieval” clock on lines 30-31 | John Deane, runner-up | `medclock.snp` |
-| `davidsharp_diffeqt.store` | Parabola / difference equation plot | Magnus Olsson, runner-up | `diffeqt.asm` |
-| `davidsharp_intdiv.store` | Integer division | Brendan Campbell, UK schools prize | `intdiv.snp` |
-| `davidsharp_nightmare.store` | Baby chasing Tom Kilburn | Competition entry, Hurley per Computer50 | `nightmare.snp` |
-| `davidsharp_virpet.store` | Virtual pet, Tamagotchi-style | Achut Reddy, competition entry | `virpet.asm` |
-| `davidsharp_longdiv2.store` | Long division | Turing | `longdiv2.snp` |
-| `davidsharp_slide9.store` | Sliding / marquee display | Keith Wood | `slide9.snp` |
-| `davidsharp_hcf.store` | HCF of 3142 and 2178 (co-prime) | Geoff Tootill | `hcf.asm` |
-| `davidsharp_hfr989.store` | HCF routine for 989 -> 43 | Tom Kilburn | `hfr989.asm` |
-| `davidsharp_flash.store` | Flash / timing pattern | Ken Turner, replica team | `flash.asm` |
-
-Also present in [baby.zip](https://www.davidsharp.com/baby/baby.zip) as the same
-`programs/` tree.
-
-### CCS / MOSI replica diagnostics
-
-Reconstructed from bit dumps in [Baby Functions Diagnostic Test Files -
-Analysis (PDF)](https://computerconservationsociety.org/ssemvolunteers/volunteers/Baby%20Functions%20Diagnostic%20Test%20Files%20-%20Analysis.1.0.pdf).
-These programs were used on the working Baby replica and are not part of the
-1998 competition.
-
-| File | What it tests |
-|------|---------------|
-| `ccs_jmp1test.store` | **JMP** (`CI <- store line`) |
-| `ccs_jrp1test.store` | **JRP** / relative jump |
-| `ccs_ldn1test.store` | **LDN** |
-| `ccs_sto1test.store` / `ccs_sto2test.store` | **STO** |
-| `ccs_sub1test.store` | **SUB** |
-| `ccs_cmp1test.store` / `ccs_cmp2test.store` | **CMP**, skip when `A >= 0` |
-| `ccs_all1test.store` | Combined opcode test; line 16 should count down from `1024` to `-1` |
-
-Regenerate with `python3 ../scripts/convert_ccs_diagnostic.py`; it needs
-`scripts/upstream/ccs/diagnostic.txt` generated with `pdftotext` from the PDF.
-
-### HASE, JsSSEM, Rosetta, and CCS guide conversions
-
-Converted by `python3 ../scripts/convert_program_hunt.py`.
-
-| File | What it does | Source |
-|------|----------------|--------|
-| `hase_insn_demo.store` | Exercises all SSEM opcodes (short demo) | Edinburgh [mu_baby_v4.1.zip](https://www.icsa.inf.ed.ac.uk/research/groups/hase/models/ssem/mu_baby_v4.1.zip), program 1 |
-| `hase_highest_factor.store` | Highest-factor program, 18 July 1948 layout | Same HASE model, program 2; HASE loader maps instructions to lines 1+ |
-| `hase_third_demo.store` | Third built-in HASE demo (CRT / store pattern) | Same HASE model, program 3 |
-| `jsssem_fibo40.store` | Fibonacci: 40th term in A (`102334155`) | [JsSSEM](http://www.edmundgriffiths.com/jsssem.html), base-32 tape `fib` |
-| `jsssem_prisoner.store` | Playable iterated Prisoner’s Dilemma (Tit-for-Tat opponent) | JsSSEM tape `prisoner` |
-| `jsssem_addition.store` | Add two values in store | JsSSEM tape `addition` |
-| `jsssem_multiply.store` | Multiply via repeated subtraction | JsSSEM tape `multip` |
-| `jsssem_wheeler.store` | Wheeler jump subroutine demo | JsSSEM tape `wheeler` |
-| `rosetta_stop.store` | Minimal program: STOP at line 0 | [Rosetta Code - Empty program](https://rosettacode.org/wiki/Empty_program#SSEM) |
-| `rosetta_empty_loop.store` | All-zero store -> infinite `goto 1` | Same Rosetta page |
-| `rosetta_hello_graphical.store` | “Hello” drawn in Williams-tube bits | [Rosetta Code - Hello world/Graphical](https://rosettacode.org/wiki/Hello_world/Graphical#SSEM) |
-
-HASE note: the model loads instructions at store line *i+1* and trailing
-`INPUT.data_mem` words after the last instruction (see `input.hase` in the zip).
-Parameter `Program=4` is defined in the model but slot 4 is empty in
-`mu_baby_v4.1.zip`.
-
-### NevynUK / Mark Stevens
-
-Source: [NevynUK/ManchesterBaby](https://github.com/NevynUK/ManchesterBaby).
-`python3 ../scripts/convert_nevynuk.py` reads `Source/SSEMPrograms/*.ssem`
-colon listings (`NN: MNEM operand`; `SKN` = `CMP`, `HLT` = `STOP`, `BNUM` for
-binary constants).
-
-| File | What it does | Notes |
-|------|----------------|-------|
-| `nevynuk_add.store` | 10 + 5 -> **15** in A (`LDN 20`, `SUB 21`, `STO 22`, `LDN 22`, `STOP`) | Mark Stevens / ManchesterBaby.computer sample format (`Add.ssem`) |
-| `nevynuk_hcf989.store` | HCF for **989** | Mark Stevens page / `hfr989.ssem`; same bytes as `davidsharp_hfr989.store` |
-| `nevynuk_hcf1.store` | Factor demo (`N = -35`) | `HCF1.ssem` |
-| `nevynuk_hcf2.store` | Euclidean HCF, large constants | `HCF2.ssem` |
-| `nevynuk_turing_longdiv.store` | Turing long division (`A=36`, `B=20`, quotient at `@28`) | `TuringLongDivision.ssem`; see note below |
-| `nevynuk_jmp_test.store` | JMP self-test | `Factor95.ssem` (misleading name) |
-| `nevynuk_primes.store` | Prime generator | Overlaps `davidsharp_primegen` |
-| `nevynuk_parabola.store` | Parabola plot | Overlaps `davidsharp_diffeqt` |
-| `nevynuk_nightmare.store` | Nightmare | Overlaps `davidsharp_nightmare` |
-| `nevynuk_intdiv.store` | Integer division | Overlaps `davidsharp_intdiv` |
-| `nevynuk_clock.store` | Clock | Overlaps `davidsharp_medclock` |
-| `nevynuk_3minutes.store` | 3-minute timer | Overlaps `davidsharp_noodletimer` |
-
-Turing long-division note: `nevynuk_turing_longdiv.store` matches the 32-word
-RAM images in pico-baby-if, comparch, and the Charles Fox book dump. Tiny
-Tapeout's runtime test expects **STOP (`0xe0000000`) at line 28** after
-execution; the initial image has `0` there.
-
-The C++/NuttX tree also ships the same `.ssem` files under
-`Source/CPP/.../SSEMApps/`.
-
-### BabyPing
-
-Source: [hrvach/babyping](https://github.com/hrvach/babyping). BabyPing stores
-32-bit LSB-left lines (`int(line[::-1], 2)` in the upstream code). Regenerate
-with `python3 ../scripts/convert_more_sources.py`.
-
-| File | What it does | Relation to existing catalog |
-|------|----------------|------------------------------|
-| `babyping_scroll.store` | Scrolling CRT pattern | Unique, not `davidsharp_slide9` |
-| `babyping_kilburn.store` | Bit dump named “kilburn” upstream | Same bytes as `davidsharp_nightmare`, not the factor program |
-| `babyping_parabola.store` | Parabola plot | Same as `davidsharp_diffeqt` |
-| `babyping_noodle.store` | Noodle timer | Same as `davidsharp_noodletimer` |
-| `babyping_intdiv.store` | Integer division | Same as `davidsharp_intdiv` |
-| `babyping_clock.store` | Clock display | Same as `davidsharp_medclock` |
-
-### emuStudio
-
-Source: [emuStudio](https://github.com/emustudio/emuStudio) `as-ssem` (`.ssem` listings, `.bin` output).
-Regenerate with `python3 ../scripts/convert_emustudio_extra.py` and
-`python3 ../scripts/convert_round7.py` (full `src/main/examples/*.ssem` tree).
-emuStudio’s [Software for SSEM](https://www.emustudio.org/emustudio-documentation/ssem-software/)
-page also points at CCS, Historic Simulations, and gobaby `examples/` as
-reference program collections.
-
-| File | What it does | Notes |
-|------|----------------|-------|
-| `emustudio_ssem_animation.store` | Self-modifying CRT animation of the text **SSEM** | `ssem.ssem` |
-| `emustudio_add_5_3.store` | **5 + 3 → 8** (operands in lines 7–8) | Docs listing |
-| `emustudio_addition.store` | **5 + 3** (operands in lines 29–30) | `addition.ssem` — different line layout |
-| `emustudio_highest_factor.store` | Highest proper factor | Not byte-identical to `kilburn_july48` |
-| `emustudio_highest_common_factor.store` | HCF | |
-| `emustudio_bcs_division.store` | BCS division | |
-| `emustudio_dec_till_negative.store` | Count-down / dec until negative | |
-| `emustudio_medclock.store` | Medclock | |
-| `emustudio_nightmare.store` | Nightmare | |
-| `emustudio_noodle_timer.store` | Noodle timer | |
-| `emustudio_square_root.store` | Square root | |
-| `emustudio_the_fraj.store` | The Fraj | |
-
-Skipped as duplicates: `primegen.ssem`, `virpet.ssem`, `parabola.ssem`.
-
-### Cambridge SVBaby / JavaBaby (deep)
-
-[SVBaby.zip](https://www.cl.cam.ac.uk/teaching/0910/ECAD+Arch/files/SVBaby.zip): switches **SW15–17** select
-`progNIGHT` / `progNOODLE` / `progFIB` (see `reference/cambridge_svbaby_switch_map.md`).
-All seven `.SNP` files in JavaBaby and BabySNPtoV match existing catalog bytes; `progPARABOLA.sv` is not switch-selected.
-
-### gobaby
-
-Source: [jcla1/gobaby](https://github.com/jcla1/gobaby) `examples/` (also cited by emuStudio docs).
-
-| File | What it does | Relation to existing catalog |
-|------|----------------|------------------------------|
-| `gobaby_factor.store` | Factor 2^18, Joseph Adams listing | Same as `ccs_factorct` and the [Retrocomputing SE](https://retrocomputing.stackexchange.com/a/2869) / [gobaby `examples/factor.asm`](https://github.com/jcla1/gobaby/blob/main/examples/factor.asm) listing (`gobaby -t -l 27 -p=f`) |
-| `gobaby_primegen.store` | Chainable prime generator | Same as `davidsharp_primegen` |
-| `gobaby_simple_calc.store` | 5 - 3 -> result in line 9 | Unique, 5 steps |
-
-### Andy Bower sim / Python (round 2)
-
-Sources: [manchester-baby-sim](https://github.com/andy-bower/manchester-baby-sim),
-[ManchesterBabyPython](https://github.com/andy-bower/ManchesterBabyPython).
-Regenerate with `python3 ../scripts/convert_round2.py` (numbered `.asm` only;
-skips catalog duplicates).
-
-| File | What it does | Relation to existing catalog |
-|------|----------------|------------------------------|
-| `bower_sim_fibonacci.store` | Fibonacci to index in line 29 (default 46) | David Tarnoff tutorial layout; not the same bytes as `cambridge_fib` |
-| `bower_mpy_jrptest.store` | JRP self-test; stops with **A = 2** | Numbered listing (`JRPTest.asm`); differs from `babyutils_test_jrp` |
-| `bower_mpy_cirollover.store` | CI rollover / STOP exercise | `CIRollover.asm` |
-
-`convert_round2.py` also skips byte-identical copies of `ccs_factorct`,
-`davidsharp_primegen`, `nevynuk_*`, and Turing long division already in
-`nevynuk_turing_longdiv.store`. CCS-style `samples/ssem/tests/*.snp` in the sim
-repo match the existing `ccs_*test.store` set.
-
-### babyutils toolchain tests (round 3)
-
-Source: [andy-bower/babyutils](https://github.com/andy-bower/babyutils) `test/`.
-Regenerate with `python3 ../scripts/convert_round3.py`, which uses
-`parse_babyutils_asm()` (labels, `EJA`, implicit line addresses). Skips
-`macro.asm`, `relative.asm`, `subroutines.asm` (extra syntax), and
-`lddiv.asm` / `lddiv-pic.asm` (same bytes as `nevynuk_turing_longdiv`).
-
-| File | What it does | Notes |
-|------|----------------|-------|
-| `babyutils_test_jmp.store` | **JMP** via `EJA` trampoline (`test-jmp.asm`) | Check words at lines 28-31 |
-| `babyutils_test_jrp.store` | **JRP** via `EJA` (`test-jrp.asm`) | Different layout from `bower_mpy_jrptest` |
-| `babyutils_test_count31.store` | Count down with **SKN** / **HLT** at 2^31 wrap | `test-count31.asm` |
-| `babyutils_test_count_forever.store` | Infinite subtract loop (no **HLT**) | `test-count-forever.asm` |
-| `babyutils_madd2_readme.store` | **MADD2** macro (1+2→3); hand-expanded from README | `bas` macro build needs `asm-parse.h`; `test/macro.asm` needs full `bas` |
-
-### BabyBaby FPGA (Dave Haworth / g4ugm)
-
-Source: [g4ugm/BabyBaby](https://github.com/g4ugm/BabyBaby) (Hackaday [project 8912](https://hackaday.io/project/8912-babybaby-or-extremely-small-experimental-computer));
-CCS *Resurrection* 73 describes the MSI **Slider** demo. `Programs.coe` holds four 32-word banks:
-**BabySlide**, **PrimeGen**, **Diffeq**, **Blank**. Regenerate with
-`python3 ../scripts/convert_babybaby.py` (radix-2 LSB-left `.coe` strings).
-
-| File | What it does | Notes |
-|------|----------------|-------|
-| `babybaby_slider_baby.store` | Slider: shifts lower third of store right; **BABY** bitmap on lines 24–31 | Preload from `BabySlide.coe` / bank 1 of `Programs.coe` |
-| `babybaby_primegen.store` | Prime generator (bank 2) | Not byte-identical to `davidsharp_primegen` |
-| `babybaby_diffeqt.store` | Parabola / difference-equation demo (bank 3) | Not byte-identical to `davidsharp_diffeqt` |
-
-Hackaday logs mention other MSI CRT patterns (**Boats**, **Trains**, **Christmas Trees**)
-as alternate bitmaps for the same slider program; those variants are **not** in the
-published `Programs.coe` (only the **BABY** graphic is embedded). The FPGA bitstream
-uses non–LSB-first packing in `lines.hex`; catalog images use the `.coe` disassembly form.
-
-### BlackIce MX (FPGA book)
-
-Source: [Open Source FPGAs using BlackIce MX — Soft Processors](https://lawrie.github.io/blackicemxbook/Soft_Processors/Soft_Processors.html).
-Regenerate with `python3 ../scripts/convert_round4.py`. The book’s `lines.hex` uses **different** 32-bit packing than Williams-tube LSB-left; the catalog image follows the book’s **disassembly** (MADM-compatible).
-
-| File | What it does | Notes |
-|------|----------------|-------|
-| `blackice_multiply.store` | Multiply **5 × 50 → 250** in A and line 31 | 77 steps in `madm_sim`; constants in lines 29–30 |
-
-Tracked sources: `reference/blackice_multiply.{asm,lines.hex,disasm}` (FPGA hex is not MADM bit order).
-
-### Rust `baby-emulator` / SSEMBabyEmulator
-
-Layouts are taken from `core/mod.rs` and assembler docs. Crates.io `0.2.1`
-source does not build as-is because of format-string typos.
+## Good first programs
 
 | File | What it does |
 |------|----------------|
-| `baby_rust_add5.store` | `BabyModel::new_example_program()`; 5+5 -> A = -10 display |
-| `baby_rust_countdown.store` | README loop: 10 down to -1, about 34 steps |
+| `kilburn_july48.store` | Highest factor (1948 listing) |
+| `davidsharp_primegen.store` | Prime generator (restart after STOP) |
+| `cambridge_fib.store` | Short Fibonacci |
+| `ccs_all1test.store` | All opcodes (diagnostic) |
+| `gobaby_factor.store` | Classic factor program (Retro SE / CCS layout) |
+| `nevynuk_turing_longdiv.store` | Turing long division |
+| `show67.store` | Local demo — draws `67` on the tube |
 
-Tracked source: `reference/rust_baby_emulator_countdown.asm` (crate README; `convert_round6.py`).
+## Catalog (by prefix)
 
-### Local demos
+| Prefix | Count | Examples |
+|--------|------:|----------|
+| `ccs_` | 14 | `ccs_all1test`, `ccs_factorct`, `ccs_jmp1test` |
+| `davidsharp_` | 13 | `primegen`, `nightmare`, `medclock`, `hfr989` |
+| `nevynuk_` | 12 | `hcf989`, `turing_longdiv`, `primes` |
+| `emustudio_` | 12 | `addition`, `highest_factor`, `square_root` |
+| `babyping_` | 6 | `scroll`, `parabola`, `intdiv` |
+| `progref_` / `ccs_progref_` / `manchester_ref_` | 10 | Manual A1/A2 idioms and mini-tests |
+| `babyutils_` | 5 | `test_jmp`, `test_jrp`, `madd2_readme` |
+| `jsssem_` | 5 | `fibo40`, `prisoner`, `addition` |
+| `madrona_` | 3 | `medclock`, `noodletimer`, `sqrt` |
+| `hase_` | 3 | `insn_demo`, `highest_factor` |
+| `gobaby_` | 3 | `factor`, `primegen`, `simple_calc` |
+| `bower_` | 3 | `fibonacci`, `jrptest` |
+| `babybaby_` | 3 | `slider_baby`, `primegen`, `diffeqt` |
+| `rosetta_` | 3 | `stop`, `empty_loop`, `hello_graphical` |
+| other | 8 | `kilburn_july48`, `m1sim_factor`, `cambridge_fib`, `blackice_multiply`, `baby_rust_*`, `show67`, `bolk_anim` |
 
-| File | What it does | Source |
-|------|----------------|--------|
-| `show67.store` | Draws bitmap `67` on store rows when run (not pre-painted) | Written for this MADM port |
-| `bolk_anim.store` | Reveals `BOLK` row by row from masked row data | Written for this MADM port |
+Full list: `ls *.store`. Many names overlap across sources (same bytes, different archives).
 
-### Madrona SSEM (`madrona.ca/e/SSEM`)
+## Sources
 
-Source: [madrona.ca/e/SSEM/programs/](https://madrona.ca/e/SSEM/programs/) (Brent Hilpert simulator pages; fetch with `curl -k` if TLS fails).
-Regenerate: `python3 ../scripts/convert_round10.py`. HTML mirrors: `reference/madrona/programs/`.
+See **[SOURCES.md](SOURCES.md)** for links to the original sites and repos.
 
-| File | What it does | Notes |
-|------|----------------|-------|
-| `madrona_medclock.store` | 1998 competition medieval clock | Line 27 = fast-sim timing constant (vs `davidsharp_medclock`) |
-| `madrona_noodletimer.store` | 1998 noodle timer winner | Line 31 fast-sim timing (vs `davidsharp_noodletimer`) |
-| `madrona_sqrt.store` | Square root by odd subtraction | Hilpert 2000; differs from `emustudio_square_root` at line 26 |
-
-Other Madrona pages (add, dtn, div, hcf, hf, …) match existing catalog entries; `hf` = `nevynuk_hcf1` (X=35), not `kilburn_july48` (2^18).
-
-### Programmer's Reference Manual (A1/A2 idioms)
-
-Two mirrors of the same CCS/Manchester manual: [Computer50 `ssemref.html`](https://curation.cs.manchester.ac.uk/computer50/www.computer50.org/mark1/prog98/ssemref.html) and [CCS `progref1.html`](https://www.cs.man.ac.uk/CCS/SSEM/progref1.html). Patterns in `reference/manchester-ref/` and `reference/ccs-progref/`. Harvest notes: `reference/LAYER8_HARVEST.md`, `reference/LAYER9_HARVEST.md`.
-
-| File | What it does | Regenerate |
-|------|----------------|------------|
-| `manchester_ref_add_xy.store` | A2.1 — add x+y via LDN/SUB/STO (5+3→line 30) | `convert_round10.py` |
-| `manchester_ref_dec_loop_a22.store` | A2.2 variant — dec loop (lines 1–7, 20, 28, 31) | `convert_round10.py` |
-| `ccs_progref_small_constant_loop.store` | A2.2 canonical — dual-use line 20 (constant 1 + JMP→line 2) | `convert_round11.py` |
-| `ccs_progref_instruction_mod.store` | A2.3 — one-step instruction modification at line 6 | `convert_round11.py` |
-| `ccs_progref_counting.store` | A2.4 — counter in instruction address field | `convert_round11.py` |
-| `progref_test_ldn_sto_sub.store` | Mini-test: LDN/SUB/STO (4+2→6) | `convert_round11.py` |
-| `progref_test_cmp_jmp_indirect.store` | A1.1 — CMP + indirect JMP loop | `convert_round11.py` |
-| `progref_test_jrp_relative.store` | A1.2 — JRP relative jump | `convert_round11.py` |
-| `progref_test_func5_alias_sub.store` | Function 5 = SUB (MADM `exec_ins.c` optab) | `convert_round11.py` |
-| `progref_test_ci_wraparound.store` | A1.3 — CMP at line 30 → execute line 0 | `convert_round11.py` |
-
-A2.3 full “instruction as data” fragment is incomplete in the manual; `ccs_progref_instruction_mod` is the runnable one-step demo.
-
-### Checked but not added as new programs
-
-| Source | Status |
-|--------|--------|
-| [krisjdev/pico-baby-if](https://github.com/krisjdev/pico-baby-if) | Turing long-division RAM matches `nevynuk_turing_longdiv.store` |
-| [charles.fox/comparch](https://gitlab.com/charles.fox/comparch) ch07 / Fox book dump | Same Turing long-division image; see NevynUK note above |
-| [Retrocomputing SE #2869](https://retrocomputing.stackexchange.com/a/2869) | Full `factor.asm` = `gobaby_factor` / `ccs_factorct` (`reference/retro_factor_gobaby.asm`) |
-| Mark Stevens / NevynUK C++ tests | `reference/nevynuk_cpp_unit_tests.md` — API only; programs = existing `nevynuk_*.store` |
-| Cambridge SVBaby SW15–17 | `reference/cambridge_svbaby_switch_map.md` — prog1/2/3 = NIGHT/NOODLE/FIB SNPs (catalog dups) |
-| baby-emulator crate tests | Only API tests; programs = `baby_rust_add5` + `baby_rust_countdown` |
-| Pico `program.c` | `reference/pico_baby_if_program.c` = Turing long div |
-| babyutils `macro.asm` / `relative.asm` / `subroutines.asm` | Need `bas` macro expansion; mirrors in `reference/babyutils/` |
-| [Gunkies Manchester Baby](https://gunkies.org/wiki/Manchester_Baby) | Link map only — `reference/gunkies_baby_links.md` |
-| Oxford 8-bit SSEM | `ssem-inspired/oxford-8bit/` — Elm UI, no preset 32-bit stores |
-| Digital60 `babyInstructions.html` | Pedagogy — `reference/digital60_baby_instructions_note.md` |
-| HASE homepages mirror | Same mu_baby zip as `hase_*` — `reference/hase_mirror_note.md` |
-| Layer harvest index | `reference/LAYER6_HARVEST.md` … `LAYER9_HARVEST.md` |
-| [open-simh/simh](https://github.com/open-simh/simh) | `SSEM/` supports `LOAD`/`DUMP` of `.st` store files and mnemonic entry, but ships no sample `.st` programs |
-| [diy-ic/tt-manchester-baby](https://github.com/diy-ic/tt-manchester-baby) | `test/test.py` init RAM is Turing long division, identical to `nevynuk_turing_longdiv.store` |
-| [EMF Manchester Baby](https://em.ulat.es/machines/ManchesterBaby/) | HTTPS fetch failed here; retry manually for embedded JS demos |
-| MAME `ssem_quik.zip` | archive.org returned HTTP 401/500; bytes match David Sharp SVN via `ssem_quik.xml` CRCs |
-| NevynUK Python `Assembler()` | Does not accept `BNUM` lines, only `BIN` / `BINS`; use this repository's converter instead |
-
-## Provenance notes
-
-### MAME `ssem_quik`
-
-MAME 0.226 ([whatsnew](https://www.mamedev.org/releases/whatsnew_0226.txt))
-lists working quickload software for `ssem`: DIFFEQT, FLASH, HCF, HFR989,
-INTDIV, LONGDIV2, MEDCLOCK, NIGHTMARE, Noodle Timer, PRIMEGEN, Slide Show, and
-Virtual Pet. The list is credited to Robbbert, with “all from the collection” on
-Virtual Pet.
-
-The software-list ROM pack is `ssem_quik.zip` on archive.org, but the May 2026
-fetch returned HTTP 401/500 here. The authoritative metadata is still
-[hash/ssem_quik.xml](https://raw.githubusercontent.com/mamedev/mame/master/hash/ssem_quik.xml).
-
-CRC checks show that raw bytes from [David Sharp SVN](https://davidsharp.com/publicsvn/baby/source/com/davidsharp/baby/program/)
-match MAME’s CRC32 values for `diffeqt.asm`, `noodletimer.snp`, `slide9.snp`,
-`virpet.asm`, and the rest of the 12-program set. So MAME’s “collection” is the
-same set already represented by `davidsharp_*.store`, not a separate hidden
-corpus.
-
-MAME git notes: commits
-[186db4f6](https://github.com/mamedev/mame/commit/186db4f627),
-[6f8aece](https://github.com/mamedev/mame/commit/6f8aece4a4), and
-[878a16d](https://github.com/mamedev/mame/commit/878a16dda1) touch
-`hash/ssem_quik.xml`. The phrase “all from the collection” appears in
-[95202d5](https://github.com/mamedev/mame/commit/95202d5e3e), where `ssem.cpp`
-hooks the `ssem_quik` software list.
-
-### Archive checks
-
-| Archive | URL | Programs inside |
-|---------|-----|-----------------|
-| David Sharp SVN | `.../baby/program/` | 12 competition files; complete public web set |
-| David Sharp `baby.zip` | [baby.zip](https://www.davidsharp.com/baby/baby.zip) | Same 12 plus PDF docs |
-| David Sharp `ssem.zip` / `src.zip` | [davidsharp.com/baby](https://www.davidsharp.com/baby/) | `ssem.jar` menu: Baby9, diffeqt, noodletimer, primegen, virpet |
-| Manchester `m1sim.zip` | [CCS SSEM](https://www.cs.man.ac.uk/CCS/Archive/simulators/SSEM/) | `FACTOR` plus DOS simulator |
-| Cambridge `JavaBaby.zip` / `SVBaby.zip` / `BabySNPtoV.zip` | `scripts/upstream/cambridge-deep/` | 7 SNPs + 3 switch-selected `prog*.sv`; all match catalog |
-| Historic Simulations | [Wayback `ssem.zip`](https://web.archive.org/web/20160617145948/http://historicsimulations.com/ssem.zip) | `SSEM.txt` manual + `ManchesterBaby.exe`; no separate program files |
-| Computer50 mirror | [prog98](https://curation.cs.manchester.ac.uk/computer50/www.computer50.org/mark1/prog98/) | About 128 entries described; no bulk download |
-| Digital60 2008 contest | `.../Digital60/Digital60-AliceCompetition/` | Live URL 404; Wayback prize pages link missing entry zips; CDX has the same David Sharp emulator zips |
-| CCS SSEM emulators | [computerconservationsociety.org/software/ssem/](https://www.computerconservationsociety.org/software/ssem/) | `madm.zip` = Lee Wittenberg source; `wmadm.zip` = Windows build + `factor.mdm` (July 1948 factor = `kilburn_july48`) and `sample.mdm` (format demo only); `m1sim.zip` = Andy Molyneux 1996 DOS sim + `FACTOR.SNP` |
-| Mark Stevens page listings | ManchesterBaby.computer | Minimal add (10+5→15) = `nevynuk_add`; HCF/989 = `nevynuk_hcf989` |
-| Linux Voice #6 (archive.org) | Lab-book factor reconstruction (OCR) | `scripts/upstream/linuxvoice/baby-factor-labbook-reconstruction.txt`; same algorithm family as `kilburn_july48` / factor programs |
-| AC21009 Baby Assembler | [vlee489/AC21009-…](https://github.com/vlee489/AC21009-Assignment-3-Manchester-Baby-Assembler) | `configSample.txt` opcode table; sample sources use **VAR** / **MTP** dialect, not converted |
-| CCS [software-index.htm](https://www.computerconservationsociety.org/software/software-index.htm) | SSEM emulators linked from `software/ssem/` (madm, wmadm, m1sim) | Same programs as `kilburn_july48`, `m1sim_factor`, etc. |
-| SIMH `SSEM/` | `.st` LOAD/DUMP support | No sample `.st` programs shipped in tree |
-| CCS diagnostic PDF | [volunteers analysis PDF](https://computerconservationsociety.org/ssemvolunteers/volunteers/Baby%20Functions%20Diagnostic%20Test%20Files%20-%20Analysis.1.0.pdf) | Nine `*Test.snp` programs -> `ccs_*test.store` |
-
-Not found as downloadable `.snp` files: `PROG1.SNP` (989 demo, described in a
-guide but no public snapshot), `slidex.snp` (museum demo name in refman), and
-the remaining Computer50 `prog98` submissions. `FACTORCT.SNP` is reproduced as
-`ccs_factorct.store` from the CCS volunteer guide PDF; it may differ slightly
-from the MOSI file because the guide omits ignored bit-5 flags.
-
-For more material, try
-[compsci-history@listserv.manchester.ac.uk](mailto:compsci-history@listserv.manchester.ac.uk),
-MOSI, or the Manchester archive.
-
-## Regenerating
-
-The conversion scripts live in `../scripts/`. Maintainer workflow:
-
-```bash
-cd ../scripts
-./download_upstream.sh
-python3 convert_program_hunt.py
-python3 convert_nevynuk.py
-python3 convert_ccs_diagnostic.py
-python3 convert_more_sources.py
-python3 convert_round2.py
-python3 convert_round3.py
-python3 convert_fox_retro.py
-python3 convert_emustudio_extra.py
-python3 convert_ccs_mdm.py
-python3 convert_round4.py
-python3 convert_babybaby.py
-python3 convert_round5.py
-python3 convert_round6.py
-python3 convert_round7.py
-python3 convert_round8.py
-python3 convert_round9.py    # layer 7 refs (no new stores)
-python3 convert_round10.py   # Madrona + manchester-ref A2.x
-python3 convert_round11.py   # CCS progref + mini-tests
-```
-
-See `../scripts/README.md` for script-specific notes.
-
-## Non-Baby architectures (separate tree)
-
-Round-5 sources that are **not** 32×32 Baby store images are documented under
-[`../ssem-inspired/README.md`](../ssem-inspired/README.md): **C88** (8×8-bit RAM),
-**EMF** web UI (David Sharp–family `.bys` buttons; samples not on server),
-**Baby8** soft-core (different ISA), and notes on missing BabyBaby boat/train
-slider bitmaps. **Open SIMH** supports `.st` load but ships no example files.
+Optional maintainer scripts to rebuild `.store` from upstream caches live in `../scripts/` (`upstream/` is gitignored).
