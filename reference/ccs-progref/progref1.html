@@ -1,0 +1,635 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=ISO-8859-1">
+<TITLE>The Manchester University Small-Scale Experimental Machine</TITLE>
+<style type="text/css"> p {text-align: justify; margin-left: 5%} </style>
+</HEAD>
+<BODY>
+
+<CENTER><h2>The Manchester University Small-Scale Experimental Machine</h2></center>
+<br />
+<CENTER><h2>Programmer&rsquo;s Reference Manual</h2></center>
+<br />
+<h3>Introduction</h3>
+<P>The Small-Scale Experimental Machine (SSEM) is the 
+&quot;official&quot; name for the prototype Manchester Mark 1 as it 
+existed when it successfully executed the world&rsquo;s first stored computer 
+program on 21st June 1948. After that date, the machine underwent 
+significant expansion in both capacity and functionality, including 
+the invention of innovations such as the &quot;B&quot;-tube (what we 
+today call instruction-modifier, or index register). The designers of 
+the machine had a policy of making it work stage by stage, rather than 
+building the whole thing before attempting to make it work. This policy 
+is what enabled them to get the machine working at such an early date. 
+The Programmer&rsquo;s Reference given here is for that original minimal 
+machine. There was no formal document at the time - the whole description 
+was, and only needed to be, in the designers&rsquo; notebooks.</P>
+<P>I am grateful to Keith Wood and Andy Molyneux for 
+providing some of the information and wording used in this Programmer&rsquo;s 
+Reference document.</P>
+<br />
+<P><a href="&#x6d;&#00097;&#x69;&#x6c;&#x74;&#x6f;&#58;&#x63;&#x70;&#00098;&#00064;&#x65;&#110;&#118;&#101;&#000120;&#00046;&#100;&#x65;&#x6d;&#000111;&#x6e;&#00046;&#00099;&#x6f;&#x2e;&#x75;&#107;">Chris P Burton</a>
+ - The Computer Conservation Society, &nbsp;Issue 2, &nbsp;20th August 1997</P>
+<br />
+<h3>2  Functional description</h3>
+<h4>2.1 The Store</h4>
+<P>The Store holds 32 lines, each of 32 binary digits. The lines are 
+numbered 0-31, (from top to bottom when viewed on the monitor screen), 
+and the digits are numbered 0-31 from left to right, with digit 0 being 
+the least significant. Note this arrangement of binary significance, 
+which was commonplace in the early development of serial computers as 
+a consequence of the least significant digit appearing first (to make 
+arithmetic carry circuits simpler) and the usage in engineering that 
+time is often mapped on to a conventional X-axis.</P>
+<P>The Store holds both instructions and data - what is often called 
+&quot;Von Neumann&quot; architecture.</P>
+<h4>2.2  The Accumulator</h4>
+<P>The Accumulator has a single line of 32 digits, and holds the result 
+of arithmetic operations.</P>
+<h4>2.3  The Control</h4>
+<P>The Control normally holds a single line of 32 digits, known as the 
+&quot;Control Instruction&quot;, or &quot;CI&quot;. The CI is similar 
+to what we would today call the PC or Program Counter, and it contains 
+the address (i.e. the line number) in the Store of an instruction. The 
+CI is always incremented just prior to fetching an instruction for 
+execution, so it typically holds the address of the instruction 
+executed last, rather than to be executed next. Consequently, the 
+instruction in line 1 will be the first to be executed when a program 
+starts.</P>
+<P>During the execution of an instruction, the Control transiently 
+holds a second line known as the &quot;Present Instruction&quot; or 
+&quot;PI&quot;,  containing the actual instruction fetched and being 
+executed. While the machine is not executing instructions, the PI line 
+does not exist. </P>
+<h4>2.4 Number format</h4>
+<P>Numbers are 32 bits long. The convention is that the most significant 
+bit is a sign bit; negative numbers are held in complement form. There 
+is no hardware to detect overflow or provide sign extension. Carries 
+out of the top of a word are lost.</P>
+<h4>2.5 Instruction format</h4>
+<P>An instruction has two components: a &quot;line number&quot; and a 
+&quot;function number&quot;. The line number indicates the line of the 
+store on which the instruction should operate, and the function number 
+indicates the operation to be performed on that line. The &quot;CMP&quot; 
+and &quot;STOP&quot; instructions do not use the line number, and 
+ignore anything in that line of the store..</P>
+<P>One line in the store holds one instruction with the following 
+layout:</P>
+
+<TABLE border ALIGN="CENTER" WIDTH=500>
+<TR align="center">
+<TD WIDTH="20%">Line No.</TD>
+<TD WIDTH="35%">Not used</TD>
+<TD WIDTH="20%">Func. No.</TD>
+<TD WIDTH="25%">Not used</TD>
+</TR>
+<TR align="center">
+<TD WIDTH="20%"> 0 1 2 3 4</TD>
+<TD WIDTH="35%">5 6 7 8 9 10 11 12</TD>
+<TD WIDTH="20%"> 13 14 15</TD>
+<TD WIDTH="25%">16 . . . . 31</TD>
+</TR>
+</TABLE>
+
+<P>Only the eight defined bits are used in an instruction - the unused bits may be 
+used for any purpose by the programmer and will be ignored by the instruction 
+decoder.</P>
+<br />
+<h4>2.6&#9;Instruction set</h4>
+<br />
+<P>The function codes are tabulated below:</P>
+
+<TABLE BORDER ALIGN="CENTER" cellpadding=7 WIDTH=564>
+<TR align="center">
+<TD WIDTH="15%">Function number</TD>
+<TD WIDTH="10%">Binary code</TD>
+<TD WIDTH="15%">IEE paper mnemonic</TD>
+<TD WIDTH="15%">&quot;Modern&quot; mnemonic</TD>
+<TD WIDTH="45%">Description</TD>
+</TR>
+<TR align="center">
+<TD WIDTH="14%">0</TD><TD WIDTH="11%">000</TD><TD WIDTH="16%">s, C</TD><TD WIDTH="14%">JMP</TD>
+<TD WIDTH="46%" align="left">Copy content of Store line to CI</TD>
+</TR>
+<TR align="center">
+<TD WIDTH="14%">1</TD><TD WIDTH="11%">100</TD><TD WIDTH="16%">c + s, C</TD><TD WIDTH="14%">JRP</TD>
+<TD WIDTH="46%" align="left">Add content of Store line to CI</TD>
+</TR>
+<TR align="center">
+<TD WIDTH="14%">2</TD><TD WIDTH="11%">010</TD><TD WIDTH="16%">-s, A</TD><TD WIDTH="14%">LDN</TD>
+<TD WIDTH="46%" align="left">Copy content of Store line, negated, to Accumulator</TD>
+</TR>
+<TR align="center">
+<TD WIDTH="14%">3</TD><TD WIDTH="11%">110</TD><TD WIDTH="16%">a, S</TD><TD WIDTH="14%">STO</TD>
+<TD WIDTH="46%" align="left">Copy content of Accumulator to Store line</TD>
+</TR>
+<TR align="center">
+<TD WIDTH="14%">4</TD><TD WIDTH="11%">001</TD><TD WIDTH="16%">a-s, A</TD><TD WIDTH="14%">SUB</TD>
+<TD WIDTH="46%" align="left">Subtract content of Store line from Accumulator</TD>
+</TR>
+<TR align="center">
+<TD WIDTH="14%">5</TD><TD WIDTH="11%">101</TD><TD WIDTH="16%">-</TD><TD WIDTH="14%">-</TD>
+<TD WIDTH="46%" align="left">Same as function number 4</TD>
+</TR>
+<TR align="center">
+<TD WIDTH="14%">6</TD><TD WIDTH="11%">011</TD><TD WIDTH="16%">Test</TD><TD WIDTH="14%">CMP</TD>
+<TD WIDTH="46%" align="left">Skip next instruction if content of Accumulator is negative</TD>
+</TR>
+<TR align="center">
+<TD WIDTH="14%">7</TD><TD WIDTH="11%">111</TD><TD WIDTH="16%">Stop</TD><TD WIDTH="14%">STOP</TD>
+<TD WIDTH="46%" align="left">Light &quot;Stop&quot; neon and halt the machine.</TD>
+</TR>
+</TABLE>
+
+<P>Some further details about instruction operation are given in Appendix 1, and 
+some programming hints in Appendix 2.</P>
+<br />
+<h4>2.7 Instruction timings</h4>
+<P>The SSEM is a serial computer, and the clock speed may be assumed to be 100kc/s, 
+i.e. 10 microseconds per digit. The digit period at 21st June 1948 was probably 
+between 8.5 and 9.5 microseconds, but it was fixed at 10 microseconds later.</P>
+<P>An instruction always takes four word times to execute, and each word is 32 bits 
+plus 4 bits in the gap between words. The time for an instruction therefore is 1.44mS, 
+or a computer speed of about 700 instructions per second.</P>
+<br />
+<h3>Appendix 1 - Programming details</h3>
+<br />
+<P>A1.1&#9;The &quot;JMP&quot; instruction</P>
+<br />
+<P>The line number addresses a line in the store containing a line number to be 
+transferred to CI, i.e. it is an indirect jump in modern terminology. Remember that 
+the whole line is transferred to CI, and that CI is incremented just prior to 
+starting a new instruction. For example:</P>
+<br />
+
+<TABLE BORDER ALIGN="CENTER" CELLPADDING=7 WIDTH=577>
+<TR ALIGN="CENTER">
+<TD WIDTH="11%">Line number</TD><TD WIDTH="18%">Instruction or data</TD>
+<TD WIDTH="18%">Binary</TD><TD WIDTH="54%">Comment</TD>
+</TR>
+<TR ALIGN="CENTER"><TD WIDTH="11%">...</TD><TD WIDTH="18%">&nbsp;</TD>
+<TD WIDTH="18%">&nbsp;</TD><TD WIDTH="54%" align="left">&nbsp;</TD>
+</TR>
+<TR ALIGN="CENTER">
+<TD WIDTH="11%">6</TD><TD WIDTH="18%">SUB 19</TD>
+<TD WIDTH="18%">11001....001..</TD>
+<TD WIDTH="54%" align="left">Accumulator op.,  subtract contents of line 19</TD>
+</TR>
+<TR ALIGN="CENTER">
+<TD WIDTH="11%">7</TD><TD WIDTH="18%">CMP</TD>
+<TD WIDTH="18%">00000....011...</TD>
+<TD WIDTH="54%" align="left">Test sign of Accumulator</TD>
+</TR>
+<TR ALIGN="CENTER">
+<TD WIDTH="11%">8</TD><TD WIDTH="18%">JMP 10</TD>
+<TD WIDTH="18%">01010....000...</TD>
+<TD WIDTH="54%" align="left">Jump back to instruction in line 6 if positive</TD>
+</TR>
+<TR ALIGN="CENTER">
+<TD WIDTH="11%">9</TD><TD WIDTH="18%">STOP</TD>
+<TD WIDTH="18%">00000....111...</TD>
+<TD WIDTH="54%" align="left">Stop if negative</TD>
+</TR>
+<TR ALIGN="CENTER">
+<TD WIDTH="11%">10</TD><TD WIDTH="18%">5</TD>
+<TD WIDTH="18%">10100.....000..</TD>
+<TD WIDTH="54%" align="left">CI for the JMP. One less than the destination line</TD>
+</TR>
+<TR ALIGN="CENTER">
+<TD WIDTH="11%">...</TD><TD WIDTH="18%">&nbsp;</TD><TD WIDTH="18%">&nbsp;</TD>
+<TD WIDTH="54%" align="left">&nbsp;</TD>
+</TR></TABLE>
+<br />
+<br />
+<P>A1.2&#9;The &quot;JRP&quot; instruction</P>
+<br />
+<P>The line number addresses a line in the Store containing a line number to be 
+added to CI, i.e. an indirect relative jump. The whole contents of the addressed 
+Store line is added to the CI and the result kept in CI. When the next instruction 
+is started the CI is incremented, and the least significant 5 digits used as the 
+address for fetching the instruction. [Note. This seems to be a &quot;luxury&quot; 
+instruction to have in a minimal machine. The reason is that it is trivially easy 
+to implement, and Tom Kilburn was looking towards the imminent increased storage 
+capacity and use of relocatable code for use in subroutines.] </P>
+<br />
+<P>A1.3&#9;Manipulation of CI</P>
+<br />
+<P>As mentioned earlier, the CI is incremented before an instruction is fetched and 
+executed. During program execution, if a CMP instruction finds that the Accumulator 
+is negative, then a Test Flip Flop is set. If the Test Flip Flop has been set, then 
+CI will next be incremented by two instead of by one, and the Test Flip Flop will 
+be reset. Note that only the five least significant bits of CI are used to address 
+a line in the store, so it is possible for a CMP instruction in line 30 to be 
+followed by an instruction either in line 31 (Accumulator positive) or in line 0 
+(Accumulator negative).</P>
+<P>CI is incremented whether instructions are fetched automatically or manually (see 
+A3.3.2). This means that it is not possible to stop a program, perform a manual 
+instruction, then resume the program where it was left. On the other hand, this 
+does provide a mechanism for setting the CI before starting a program.</P>
+<br />
+<P>A1.4&#9;Function bits 13-15 in CI</P>
+<br />
+<P>The SSEM was built with minimal control hardware. The fetch phase of instructions 
+copies a word from the Store tube to the Control tube, putting it on the PI line 
+(see section 2.3 above). This is almost the same operation as the execution phase 
+of a JMP instruction, function 0, where a word is copied from the Store tube to the 
+Control tube, putting it on the CI line. The same hardware is used for both sorts of 
+operation, consequently, bits 13 to 15 of the CI must always be zero so that the 
+decoding hardware performs the correct routing during fetch phases. </P>
+<P>Bits 13 to 15 in the CI could become non-zero in the following ways:</P>
+<P>a.&#9;Spurious bits in a JMP instruction operand line</P>
+<P>b.&#9;Spurious bits in a JRP instruction operand line, or so created by the 
+addition of the line contents to CI,</P>
+<P>c.&#9;Allowing the CI to increment such that bits carry into bit 13. This could 
+happen, for example, if a valid instruction in line 31 was followed by a valid 
+instruction in line 0. In that case there will be a carry into bit 5, and if the 
+program continues to cycle from line 31 to line 0 then eventually there will be a 
+carry into bit 13.</P>
+<P>The effect of non-zero bits in the function part of CI will normally be to cause 
+the computer to &quot;hang&quot;, because the decoding of the bits would not set up 
+a route for the instruction from the Store into the PI.  The exception is if the 
+bits are 100 (function number 1), in which case the instruction from the Store is 
+<U>added</U> to the PI left over from the previous instruction. No use is envisaged 
+for this.</P>
+<br />
+<h4>Appendix 2&#9;Some programming hints</h4>
+<br />
+<P>It is quite an art to create interesting programs with such a small storage 
+capacity and tiny instruction set. However, the example programs HCF1, LONGDIV1 and 
+PROG1 written by the pioneers show that much could be done with so little. Those 
+programs suggest some useful techniques, and further hints are in the following 
+sections. In 1948 nobody had explained that it was sinful to use instructions as 
+data and vice versa.</P>
+<br /><br />
+<P>A2.1&#9;Addition in the Accumulator using the SUB instruction</P>
+<br />
+<P>The &quot;ADD&quot; instruction was not provided in the original machine until 
+August 1948. The following fragment would be needed to add two numbers and place the 
+result back in the Store.</P>
+<br />
+
+<TABLE BORDER CELLSPACING=2 ALIGN="CENTER" CELLPADDING=7 WIDTH=577>
+<TR ALIGN="CENTER">
+<TD WIDTH="11%">Line number</TD><TD WIDTH="18%">Instruction or data</TD>
+<TD WIDTH="18%">Binary</TD><TD WIDTH="54%">Comment</TD>
+</TR>
+<TR ALIGN="CENTER">
+<TD WIDTH="11%">...</TD><TD WIDTH="18%">&nbsp;</TD><TD WIDTH="18%">&nbsp;</TD>
+<TD WIDTH="54%" align="left">&nbsp;</TD>
+</TR>
+<TR ALIGN="CENTER">
+<TD WIDTH="11%">3</TD><TD WIDTH="18%">LDN 28</TD><TD WIDTH="18%">00111....010..</TD>
+<TD WIDTH="54%" align="left">-x to A</TD>
+</TR>
+<TR ALIGN="CENTER">
+<TD WIDTH="11%">4</TD><TD WIDTH="18%">SUB 29</TD><TD WIDTH="18%">10111....001...</TD>
+<TD WIDTH="54%" align="left">-x - y to A  {=  -(x + y) }</TD>
+</TR>
+<TR ALIGN="CENTER">
+<TD WIDTH="11%">5</TD><TD WIDTH="18%">STO 30</TD><TD WIDTH="18%">01111....110...</TD>
+<TD WIDTH="54%" align="left">-(x + y) to Result</TD>
+</TR>
+<TR ALIGN="CENTER">
+<TD WIDTH="11%">6</TD><TD WIDTH="18%">LDN 30</TD><TD WIDTH="18%">01111....010...</TD>
+<TD WIDTH="54%" align="left">-(-(x + y)) to A   {=  (x + y)  }</TD>
+</TR>
+<TR ALIGN="CENTER">
+<TD WIDTH="11%">7</TD><TD WIDTH="18%">STO 30</TD><TD WIDTH="18%">01111....110..</TD>
+<TD WIDTH="54%" align="left">x + y to Result</TD>
+</TR>
+<TR ALIGN="CENTER">
+<TD WIDTH="11%">...</TD><TD WIDTH="18%">&nbsp;</TD><TD WIDTH="18%">&nbsp;</TD>
+<TD WIDTH="54%" align="left">&nbsp;</TD>
+</TR>
+<TR ALIGN="CENTER">
+<TD WIDTH="11%">28</TD><TD WIDTH="18%">x</TD><TD WIDTH="18%">&nbsp;</TD>
+<TD WIDTH="54%" align="left">First number, x</TD>
+</TR>
+<TR ALIGN="CENTER">
+<TD WIDTH="11%">29</TD><TD WIDTH="18%">y</TD><TD WIDTH="18%">&nbsp;</TD>
+<TD WIDTH="54%" align="left">Second number, y</TD>
+</TR>
+<TR ALIGN="CENTER">
+<TD WIDTH="11%">30</TD><TD WIDTH="18%">x+y</TD><TD WIDTH="18%">&nbsp;</TD>
+<TD WIDTH="54%" align="left">Result, x + y</TD>
+</TR></TABLE>
+<br /><br />
+
+<P>A2.2&#9;Small constants</P>
+<br />
+<P>The  indirect jump location used in JMP and JRP instructions can sometimes be 
+used as a small constant. For example:</P>
+<br />
+<TABLE BORDER CELLPADDING=7 align="center" WIDTH=577>
+<TR ALIGN="CENTER">
+<TD WIDTH="11%">Line number</TD><TD WIDTH="18%">Instruction or data</TD>
+<TD WIDTH="18%">Binary</TD><TD WIDTH="54%">Comment</TD>
+</TR>
+<TR ALIGN="CENTER">
+<TD WIDTH="11%">1</TD><TD WIDTH="18%">LDN 30</TD><TD WIDTH="18%">01111....010..</TD>
+<TD WIDTH="54%" align="left">First instruction in program </TD>
+</TR>
+<TR ALIGN="CENTER"><TD WIDTH="11%">2</TD><TD WIDTH="18%">STO 30</TD>
+<TD WIDTH="18%">01111....110..</TD>
+<TD WIDTH="54%" align="left">Top of loop</TD>
+</TR>
+<TR ALIGN="CENTER">
+<TD WIDTH="11%">....</TD><TD WIDTH="18%">&nbsp;</TD><TD WIDTH="18%">&nbsp;</TD>
+<TD WIDTH="54%">&nbsp;</TD>
+</TR>
+<TR ALIGN="CENTER">
+<TD WIDTH="11%">9</TD><TD WIDTH="18%">SUB 20</TD><TD WIDTH="18%">00101....001..</TD>
+<TD WIDTH="54%" align="left">Decrement Accumulator</TD>
+</TR>
+<TR ALIGN="CENTER">
+<TD WIDTH="11%">10</TD><TD WIDTH="18%">CMP</TD><TD WIDTH="18%">00000....011...</TD>
+<TD WIDTH="54%" align="left">Test Accumulator</TD>
+</TR>
+<TR ALIGN="CENTER">
+<TD WIDTH="11%">11</TD><TD WIDTH="18%">JMP 20</TD><TD WIDTH="18%">00101....000...</TD>
+<TD WIDTH="54%" align="left">Loop back to line 2 if positive</TD>
+</TR>
+<TR ALIGN="CENTER">
+<TD WIDTH="11%">...</TD><TD WIDTH="18%">&nbsp;</TD><TD WIDTH="18%">&nbsp;</TD>
+<TD WIDTH="54%" align="left">else continue</TD>
+</TR>
+<TR ALIGN="CENTER">
+<TD WIDTH="11%">20</TD><TD WIDTH="18%">1</TD><TD WIDTH="18%">10000....000</TD>
+<TD WIDTH="54%" align="left">Constant with  different uses</TD>
+</TR>
+<TR ALIGN="CENTER">
+<TD WIDTH="11%">...</TD><TD WIDTH="18%">&nbsp;</TD><TD WIDTH="18%">&nbsp;</TD>
+<TD WIDTH="54%">&nbsp;</TD>
+</TR></TABLE>
+<br /><br />
+
+<P>A2.3&#9;Indexing, or Instruction Modification</P>
+<br />
+<P>A common operation is to add a small integer to a word. An example would be where 
+the line number part of an instruction is to be indexed. The small integer should be 
+stored as its complement as in the following fragment.</P>
+<br />
+<TABLE BORDER align="center" CELLPADDING=7 WIDTH=577>
+<TR align="center">
+<TD WIDTH="11%">Line number</TD><TD WIDTH="18%">Instruction or data</TD>
+<TD WIDTH="18%">Binary</TD><TD WIDTH="54%">Comment</TD>
+</TR>
+<TR align="center">
+<TD WIDTH="11%">...</TD><TD WIDTH="18%">&nbsp;</TD><TD WIDTH="18%">&nbsp;</TD>
+<TD WIDTH="54%" align="left">&nbsp;</TD>
+</TR>
+<TR align="center">
+<TD WIDTH="11%">6</TD><TD WIDTH="18%">SUB 19</TD><TD WIDTH="18%">11001....001..</TD>
+<TD WIDTH="54%" align="left">Subtraction operation to be indexed through lines 19, 20, 21 etc.</TD>
+</TR>
+<TR align="center">
+<TD WIDTH="11%">....</TD><TD WIDTH="18%">&nbsp;</TD><TD WIDTH="18%">&nbsp;</TD>
+<TD WIDTH="54%" align="left">&nbsp;</TD>
+</TR>
+<TR align="center">
+<TD WIDTH="11%">12</TD><TD WIDTH="18%">LDN  6</TD><TD WIDTH="18%">01100....010...</TD>
+<TD WIDTH="54%" align="left">Complement of instruction to A</TD>
+</TR>
+<TR align="center">
+<TD WIDTH="11%">13</TD><TD WIDTH="18%">STO 0</TD><TD WIDTH="18%">00000....110...</TD>
+<TD WIDTH="54%" align="left">Store in temporary space</TD>
+</TR>
+<TR align="center">
+<TD WIDTH="11%">14</TD><TD WIDTH="18%">LDN 0</TD><TD WIDTH="18%">00000....010...</TD>
+<TD WIDTH="54%" align="left">Instruction to A</TD>
+</TR>
+<TR align="center">
+<TD WIDTH="11%">15</TD><TD WIDTH="18%">SUB 18</TD><TD WIDTH="18%">01001....001...</TD>
+<TD WIDTH="54%" align="left">Modify</TD>
+</TR>
+<TR align="center">
+<TD WIDTH="11%">16</TD><TD WIDTH="18%">STO  6</TD><TD WIDTH="18%">01100....110...</TD>
+<TD WIDTH="54%" align="left">Instruction indexed</TD>
+</TR>
+<TR align="center">
+<TD WIDTH="11%">17</TD><TD WIDTH="18%">JMP ..</TD><TD WIDTH="18%">..............000...</TD>
+<TD WIDTH="54%" align="left">Next ...</TD>
+</TR>
+<TR align="center">
+<TD WIDTH="11%">18</TD><TD WIDTH="18%">-1</TD><TD WIDTH="18%">111111111....</TD>
+<TD WIDTH="54%" align="left">-1</TD>
+</TR>
+<TR align="center">
+<TD WIDTH="11%">...</TD><TD WIDTH="18%">&nbsp;</TD><TD WIDTH="18%">&nbsp;</TD>
+<TD WIDTH="54%" align="left">&nbsp;</TD>
+</TR>
+</TABLE>
+<br /><br />
+
+<P>A2.4&#9;Counting</P>
+<br />
+<P>Similarly, counting is a frequent program requirement. Space can be conserved by 
+keeping the counter in the upper part of an instruction, as in the following code.</P>
+<br />
+<TABLE BORDER align="center" CELLPADDING=7 WIDTH=577>
+<TR align="center">
+<TD WIDTH="11%">Line number</TD><TD WIDTH="18%">Instruction or data</TD>
+<TD WIDTH="24%">Binary</TD><TD WIDTH="48%" align="left">Comment</TD>
+</TR>
+<TR align="center">
+<TD WIDTH="11%">...</TD><TD WIDTH="18%">&nbsp;</TD><TD WIDTH="24%">&nbsp;</TD>
+<TD WIDTH="48%" align="left">&nbsp;</TD>
+</TR>
+<TR align="center">
+<TD WIDTH="11%">6</TD><TD WIDTH="18%">LDN 21</TD><TD WIDTH="24%">10101....010....000</TD>
+<TD WIDTH="48%" align="left">Instruction: counter in top 3 bits</TD>
+</TR>
+<TR align="center">
+<TD WIDTH="11%">....</TD><TD WIDTH="18%">&nbsp;</TD><TD WIDTH="24%">&nbsp;</TD>
+<TD WIDTH="48%" align="left">&nbsp;</TD>
+</TR>
+<TR align="center">
+<TD WIDTH="11%">12</TD><TD WIDTH="18%">LDN  6</TD><TD WIDTH="24%">01100....010...</TD>
+<TD WIDTH="48%" align="left">Complement of instruction and counter to A</TD>
+</TR>
+<TR align="center">
+<TD WIDTH="11%">13</TD><TD WIDTH="18%">STO  0</TD><TD WIDTH="24%">00000....110...</TD>
+<TD WIDTH="48%" align="left">Store in temporary space</TD>
+</TR>
+<TR align="center">
+<TD WIDTH="11%">14</TD><TD WIDTH="18%">LDN 0</TD><TD WIDTH="24%">00000....010...</TD>
+<TD WIDTH="48%" align="left">Instruction and counter to A</TD>
+</TR>
+<TR align="center">
+<TD WIDTH="11%">15</TD><TD WIDTH="18%">SUB 20</TD><TD WIDTH="24%">00101....001...</TD>
+<TD WIDTH="48%" align="left">Increment counter</TD>
+</TR>
+<TR align="center">
+<TD WIDTH="11%">16</TD><TD WIDTH="18%">STO  6</TD><TD WIDTH="24%">01100....110...</TD>
+<TD WIDTH="48%" align="left">Counter incremented</TD>
+</TR>
+<TR align="center">
+<TD WIDTH="11%">17</TD><TD WIDTH="18%">CMP  </TD><TD WIDTH="24%">00000....011..</TD>
+<TD WIDTH="48%" align="left">End of count?</TD>
+</TR>
+<TR align="center">
+<TD WIDTH="11%">18</TD><TD WIDTH="18%">JMP ..</TD><TD WIDTH="24%">..............000</TD>
+<TD WIDTH="48%" align="left">No</TD>
+</TR>
+<TR align="center">
+<TD WIDTH="11%">19</TD><TD WIDTH="18%">JMP ..</TD><TD WIDTH="24%">..............000</TD>
+<TD WIDTH="48%" align="left">Yes</TD>
+</TR>
+<TR align="center">
+<TD WIDTH="11%">20</TD><TD WIDTH="18%">-1 in top 3 bits</TD><TD WIDTH="24%">00000....0000111</TD>
+<TD WIDTH="48%" align="left">-1 at top of word</TD>
+</TR>
+<TR align="center">
+<TD WIDTH="11%">...</TD><TD WIDTH="18%">&nbsp;</TD><TD WIDTH="24%">&nbsp;</TD>
+<TD WIDTH="48%" align="left">&nbsp;</TD>
+</TR></TABLE>
+<br /><br />
+
+<h3>Appendix 3 - Physical Description</h3>
+<br />
+<P>A complete contemporary description of the machine is given in a paper published 
+in the Proceedings of the Institution of Electrical Engineers. The paper was 
+submitted in March 1950, and published as:</P>
+<blockquote><p>Williams F.C., Kilburn T. and Tootill G.C., &quot;Universal High-Speed 
+Digital Computers: A Small-Scale Experimental Machine&quot;, <I>Proc IEE</I>, Vol. 
+<B>98</B>, Part II, No 61, February 1951, pp. 13-28.</p></blockquote>
+<P>The paper will be available for downloading from the Computer Conservation 
+Society archive site at 
+<a href="ftp://ftp.cs.man.ac.uk/pub/CCS-Archive/misc/iee1.pdf">
+         ftp://ftp.cs.man.ac.uk/pub/CCS-Archive/misc/iee1.pdf</a>.</P>
+<P>A thorough, detailed understanding of that paper should be enough to enable 
+anyone to write a program for the SSEM. However, there are subtleties of behaviour 
+which are not made explicit. Furthermore, the exact way that the &quot;input and 
+output&quot; controls appear to the user is not obvious. This appendix addresses 
+those details where they have not already been explained earlier in this 
+Programmer&rsquo;s Reference. There should be no contradictions between the IEE 
+paper and this document, except where specifically mentioned herein.  </P>
+<P>This document mostly uses the terminology used in 1948, though some modern 
+terminology is used where essential. For example it refers to information being 
+held in a &quot;line&quot; where today it would probably be more usual to say 
+&quot;location&quot; or &quot;word&quot;. The original word &quot;store&quot; is 
+used  rather than the modern anthropomorphic word &quot;memory&quot;.</P>
+<br />
+<P>A3.1  The Monitor</P>
+<P>There is a fourth cathode ray tube not used for storage but as a Monitor tube. 
+Three interlocking push buttons allow the Monitor to be connected to any one of the 
+three storage tubes. The Monitor always displays 32 lines of 32 digits. In the case 
+of the Store, this is a natural display of the whole contents of the Store. In the 
+case of the Accumulator, which only contains one line of data, that line is repeated 
+on all 32 lines of the monitor. In the case of the Control: while the machine is 
+running the CI and PI appear on alternate lines of the Monitor, but if the machine 
+is not running, then only the CI appears on all 32 lines.</P>
+<P>The digits are represented on the monitor as a small dot for a zero, and a 
+horizontal dash for a one. Any line of the Store is addressable for some operation 
+and is known as the Action Line. On the monitor, the Action Line appears brightened. 
+Manual control of the Action Line is described later in paragraph A.3.3.2.1.</P>
+<br />
+<P>A3.2  The &quot;Stop&quot; indicator.</P>
+<P>A neon indicator lamp is situated near to the Monitor. It is illuminated when a 
+Stop instruction has been decoded (see later).</P>
+<br />
+<P>A3.3  Control Switches.</P>
+<P>There are four panels containing switches. Their correct operation by the user is 
+essential if the computer is to operate according to this Programmer&rsquo;s 
+Reference. The effect of some incorrect operations, but not all, will be explained.</P>
+<br />
+<blockquote>
+<P>A3.3.1 The Typewriter.</P>
+<P>The panel contains 40 push-buttons arranged as eight columns of five buttons. The 
+buttons are numbered 0 to 31 starting at top left and running down a column and then 
+down succeeding columns from left to right. Only the first 32 buttons are connected.</P>
+<P>The Typewriter is normally used while the machine is at Stop, i.e. not executing 
+instructions. If the Write/Erase Switch (see below) is at &quot;Write&quot;, then 
+pushing a typewriter button causes a &quot;one&quot; to be written into the 
+corresponding digit position of the Action Line. If the Write/Erase Switch is at 
+&quot;Erase&quot;, then a zero is written into the position. If more than one button 
+is pressed simultaneously, then the result is usually but not always ineffective.</P>
+<P>If the machine is running, then operation of the Typewriter will affect all the 
+Action Lines encountered while the button is pressed.</P>
+<br />
+<P>A3.3.2  The Staticisor (&quot;Stat&quot;) Switch.</P>
+<P>There is a toggle switch labeled &quot;Auto/Man&quot;. The switch determines the 
+operation of five &quot;Line&quot; or &quot;L-Stat&quot; toggle switches, and three 
+&quot;Function&quot; or &quot;F-Stat&quot; toggle switches. The machine behaves 
+according to the setting of these switches as follows:</P>
+<br />
+<blockquote>
+<P>A3.3.2.1  Switch at either &quot;Man&quot; or &quot;Auto&quot;, computer not 
+running.</P>
+<P>The &quot;Line&quot; switches select which line in the store is to be the Action 
+Line. Any line-oriented operation e.g. Typewriter and KLC (see later), affects the 
+Action Line. A &quot;Line&quot; switch is down for on, up for off. The 
+&quot;Function&quot; switches  do nothing. </P>
+<br />
+<P>A3.3.2.2   Switch at &quot;Manual&quot;, computer  running.</P>
+<P>The instruction represented by the setting of the &quot;Line&quot; and 
+&quot;Function&quot; switches is executed repeatedly. &quot;Single Step&quot; mode 
+(see later) is a special case of computer running where just one instruction is 
+executed per single step. CI will be incremented.</P>
+<br />
+<P>A3.3.2.3   Switch at &quot;Auto&quot;, computer running.</P>
+<P>Instructions are fetched from the Store and executed. The instructions fetched, 
+as well as the CI itself, pass through the &quot;Line&quot; and &quot;Function&quot; 
+switches on the way to the staticisor; accordingly they must all be set to 
+&quot;on&quot;. If any switch is &quot;off&quot;, then the corresponding digit in 
+the instruction or coming from CI is forced to zero, with the predictable effect.</P>
+<P>If the Typewriter is operated, in conjunction with the Write/Erase Switch, then 
+all lines being accessed by the running program will be appropriately affected. This 
+may corrupt the program, for example if the function or line fields of instructions 
+are changed. </P>
+</blockquote>
+<br />
+<P>A3.3.3   Write/Erase Switch.</P>
+<P>As mentioned in the description of the Typewriter, this switch determines whether 
+a &quot;one&quot; or a &quot;zero&quot; is &quot;typed&quot; into the Store in the 
+selected line. It must be in the &quot;Write&quot; position while the computer is 
+running. Should it be left in the &quot;Erase&quot; position, then all action lines 
+would be corrupted. </P>
+<br />
+<P>A3.3.4   Storage clearing keys.</P>
+<P>There is a set of key switches each of which clears the appropriate storage 
+locations to zeroes. Their use while the computer is running is unpredictable. They 
+are non-locking, i.e. return to the neutral position when released.</P>
+<br />
+<blockquote>
+<P>A3.3.4.1   Key Line Clear (KLC)</P>
+<P>Clears the Action Line.  If this key is operated while a program is running, then 
+all lines being accessed by the program will be cleared, thereby corrupting the 
+program.</P>
+<br />
+<P>A3.3.4.2   Key Store Clear (KSC)</P>
+<P>Clears the whole Store. Obliterates any existing program, whether the computer is 
+running or not.</P>
+<br />
+<P>A3.3.4.3   Key Control Clear (KCC)</P>
+<P>Despite its name this key clears both the Control tube and the Accumulator tube.  If the key is operated while a program is running, then the result is not predictable, and in some circumstances the program will be corrupted.</P>
+<br />
+<P>A3.3.4.4   KAC, KBC, KEC, KMC</P>
+<P>Although physically present, these switches are not connected.</P>
+</blockquote>
+<br />
+<P>A3.3.5   Monitor selector</P>
+<P>These interlocking push buttons enable the Monitor tube to be connected to the 
+output of one of the three Storage tubes (see A3.1 above)</P>
+<br />
+<P>A3.3.6   CS switch.</P>
+<P>The Completion Signal (or Prepulse) toggle switch, CS, has an up position marked 
+&quot;Stop&quot; and a down position marked &quot;Run&quot;.  ( The term 
+&quot;Completion Signal&quot; is a hangover from the early days when the designers 
+thought of the pulse which initiates a new instruction as actually completing the 
+previous instruction. In June 1948 they were in transition to calling it the 
+&quot;Prepulse&quot;).</P>
+<P>In the &quot;Stop&quot; position, prepulses are inhibited, so the machine does 
+not run and execute instructions automatically. In the &quot;Run&quot; position, 
+prepulses are generated automatically at the end of each instruction, so causing the 
+next instruction to be fetched and executed.  Prepulses are inhibited if a Stop 
+instruction has been encountered and the &quot;Stop&quot; neon is illuminated.</P>
+<br />
+<P>A3.3.7   Key Completion, (KC) also known as Key Single Prepulse (KSP).</P>
+<P>This is effectively the non-locking Single Step key. It is effective when the CS 
+switch is at Stop, and causes one prepulse to be generated. Thus one instruction 
+will be fetched and executed. If such instruction is not a Stop instruction, then 
+incidentally the &quot;Stop&quot; neon, if illuminated, will be extinguished. </P>
+</blockquote>
+</BODY></HTML>

@@ -25,6 +25,9 @@ python3 convert_round5.py         # C88 → ../ssem-inspired/c88/*.c88ram (not .
 python3 convert_round6.py         # Rust countdown ASM, BlackIce hex/disasm, Mark Stevens refs
 python3 convert_round7.py         # emuStudio as-ssem examples; Cambridge SV map doc
 python3 convert_round8.py         # Cambridge SV reference SNPs; LAYER6_HARVEST.md
+python3 convert_round9.py         # Layer 7: babyutils/Fox/retro refs (no new stores)
+python3 convert_round10.py        # Layer 8: Madrona, ssemref A2.x, +5 stores
+python3 convert_round11.py        # Layer 9: CCS progref + progref mini-tests (+8 stores)
 python3 visual_check.py             # PNG previews → upstream/_visual_check/
 ./run_sim.sh ../programs/cambridge_fib.store
 ```

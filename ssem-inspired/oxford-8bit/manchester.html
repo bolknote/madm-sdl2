@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+  <head>
+  <link href="http://gmpg.org/xfn/11" rel="profile" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+
+  <!-- Enable responsiveness on mobile devices-->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1" />
+
+  <title>
+    
+      An 8-bit Manchester SSEM Simulator &middot; Prof Alex Rogers
+    
+  </title>
+
+  
+
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="https://www.cs.ox.ac.uk/people/alex.rogers/assets/css/main.css" />
+  
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Abril+Fatface" />
+
+  <!-- Icons -->
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="https://www.cs.ox.ac.uk/people/alex.rogers/favicon.png" />
+<link rel="shortcut icon" href="https://www.cs.ox.ac.uk/people/alex.rogers/favicon.ico" />
+
+  <!-- RSS -->
+  <link rel="alternate" type="application/rss+xml" title="RSS" href="/feed.xml" />
+
+  <!-- Additional head bits without overriding original head -->
+</head>
+
+
+  <body class="post">
+
+    <div id="sidebar">
+  <header>
+    <div class="site-title">
+      <a href="https://www.cs.ox.ac.uk/people/alex.rogers/">
+        
+          <span class="back-arrow icon"><svg fill="#000000" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+  <path d="M0 0h24v24H0z" fill="none"/>
+  <path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/>
+</svg></span>
+        
+        Prof Alex Rogers
+      </a>
+    </div>
+    <p class="lead">University of Oxford</p>
+    <img src="https://www.cs.ox.ac.uk/people/alex.rogers/assets/img/rogers.jpg" alt="Alex Rogers" width="230" class="mugshot">
+  </header>
+  <nav id="sidebar-nav-links">
+  
+
+  
+
+  
+
+
+  
+    
+  
+
+  
+    
+  
+
+  
+    
+  
+
+  
+
+  
+    
+  
+
+  
+
+  
+    
+  
+
+  
+    
+      <a class="page-link "
+          href="https://www.cs.ox.ac.uk/people/alex.rogers/publications.html">Publications</a>
+    
+  
+
+  
+    
+      <a class="page-link "
+          href="https://www.cs.ox.ac.uk/people/alex.rogers/systems.html">Systems</a>
+    
+  
+
+
+  
+
+
+  
+    
+  
+
+  
+    
+  
+
+  
+    
+  
+
+  
+
+  
+    
+  
+
+  
+
+  
+    
+  
+
+  
+    
+  
+
+  
+    
+  
+
+
+  <!-- Optional additional links to insert in sidebar nav -->
+
+  
+    <a class="page-link "
+	href="https://www.cs.ox.ac.uk/people/alex.rogers/blog/">Blog</a>
+  
+  
+</nav>
+
+
+  
+
+  <nav id="sidebar-icon-links">
+  
+  <a id="email-link"
+    class="icon" title="Email" aria-label="Email"
+    href="mailto:alex.rogers@cs.ox.ac.uk">
+    <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg width="24" height="28" viewBox="0 0 24 28" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:1.41421;">
+    <g transform="matrix(0.114066,-2.4877e-17,-2.16991e-16,0.114645,-31.5206,-46.5827)">
+        <g id="Layer-1">
+            <path id="path3381" d="M383.686,423.766C368.779,423.766 354.677,426.378 341.511,431.609C328.401,436.817 316.982,444.014 307.367,453.157C297.756,462.297 290.172,473.133 284.653,485.559C279.102,497.981 276.337,511.423 276.337,525.764C276.337,540.812 278.963,554.673 284.266,567.25C289.546,579.773 296.985,590.604 306.545,599.618C316.02,608.551 327.384,615.489 340.502,620.392C340.504,620.393 340.506,620.393 340.508,620.394C353.673,625.389 367.944,627.874 383.209,627.874C390.396,627.874 397.391,627.57 404.196,626.961C411.083,626.419 418.449,625.341 426.306,623.738C428.244,623.342 429.639,621.711 429.639,619.842L429.639,603.881C429.638,601.694 427.73,599.895 425.411,599.895C425.018,599.895 424.628,599.947 424.251,600.048C417.803,601.785 411.03,603.056 403.927,603.857C403.925,603.857 403.924,603.857 403.922,603.858C396.847,604.664 389.983,605.067 383.329,605.067C371.318,605.067 360.34,603.197 350.295,599.494C350.286,599.491 350.278,599.488 350.269,599.485C340.242,595.86 331.572,590.503 324.118,583.332C316.991,576.472 311.471,568.244 307.526,558.518C303.593,548.749 301.601,537.935 301.601,525.99C301.601,514.918 303.651,504.58 307.739,494.871C311.923,485.047 317.612,476.719 324.833,469.769C324.838,469.764 324.843,469.759 324.849,469.753C332.008,462.79 340.546,457.25 350.577,453.095C360.575,448.986 371.604,446.912 383.805,446.912C396.475,446.912 407.644,448.792 417.403,452.473C417.412,452.476 417.421,452.479 417.43,452.482C427.224,456.104 435.302,461.254 441.847,467.986C448.421,474.748 453.401,482.844 456.81,492.414C456.813,492.423 456.816,492.431 456.819,492.44C460.303,502.009 462.074,512.724 462.074,524.64C462.074,530.981 461.238,538.308 459.53,546.582C459.528,546.592 459.526,546.601 459.524,546.611C458.116,553.69 456.074,559.564 453.548,564.378L431.426,564.378L431.426,473.723C431.426,471.537 429.519,469.738 427.2,469.737L408.244,469.737C406.235,469.739 404.492,471.09 404.101,472.948C400.978,471.683 397.927,470.576 395.016,469.79C390.084,468.382 384.557,467.714 378.44,467.714C363.737,467.714 350.699,473.393 340.267,484.189C329.696,495.127 324.5,509.832 324.5,527.562C324.5,545.229 328.62,559.502 337.328,569.929C337.333,569.935 337.337,569.94 337.341,569.945C346.079,580.304 358.3,585.724 372.718,585.724C380.224,585.724 387.076,584.427 393.116,581.748C397.21,579.931 401.37,577.558 405.605,574.694L407.346,581.743C407.79,583.541 409.504,584.825 411.463,584.825L463.918,584.825C465.295,584.825 466.589,584.19 467.38,583.127C473.596,574.765 478.361,565.499 481.663,555.389C485.049,545.262 486.743,534.768 486.743,523.964C486.743,509.115 484.415,495.531 479.698,483.277C475.072,470.978 468.326,460.351 459.479,451.538C450.62,442.712 439.736,435.861 426.99,431.023C414.174,426.159 399.709,423.766 383.686,423.766L383.686,423.766ZM381.779,492.321C385.988,492.321 389.874,492.772 393.47,493.654C393.496,493.66 393.522,493.666 393.548,493.672C396.509,494.342 399.999,495.542 403.779,497.064L403.779,550.52C400.087,553.02 396.107,555.287 391.687,557.215C386.85,559.325 382.16,560.331 377.487,560.331C368.665,560.331 363.184,557.84 359.378,552.708C355.501,547.405 353.221,538.956 353.221,527.225C353.221,515.37 355.98,506.774 360.981,500.961C366.015,495.109 372.51,492.321 381.779,492.321L381.779,492.321Z" style="fill:rgb(251,247,247);fill-opacity:0.87451;"/>
+        </g>
+    </g>
+</svg>
+
+  </a>
+
+  &nbsp;
+
+  &nbsp;
+  
+  
+    <a id="github-link"
+       class="icon" title="Github" aria-label="Github"
+       href="https://github.com/AlexRogersCS">
+      <svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 28" height="24" width="28"><path d="M12 2c6.625 0 12 5.375 12 12 0 5.297-3.437 9.797-8.203 11.391-0.609 0.109-0.828-0.266-0.828-0.578 0-0.391 0.016-1.687 0.016-3.297 0-1.125-0.375-1.844-0.812-2.219 2.672-0.297 5.484-1.313 5.484-5.922 0-1.313-0.469-2.375-1.234-3.219 0.125-0.313 0.531-1.531-0.125-3.187-1-0.313-3.297 1.234-3.297 1.234-0.953-0.266-1.984-0.406-3-0.406s-2.047 0.141-3 0.406c0 0-2.297-1.547-3.297-1.234-0.656 1.656-0.25 2.875-0.125 3.187-0.766 0.844-1.234 1.906-1.234 3.219 0 4.594 2.797 5.625 5.469 5.922-0.344 0.313-0.656 0.844-0.766 1.609-0.688 0.313-2.438 0.844-3.484-1-0.656-1.141-1.844-1.234-1.844-1.234-1.172-0.016-0.078 0.734-0.078 0.734 0.781 0.359 1.328 1.75 1.328 1.75 0.703 2.141 4.047 1.422 4.047 1.422 0 1 0.016 1.937 0.016 2.234 0 0.313-0.219 0.688-0.828 0.578-4.766-1.594-8.203-6.094-8.203-11.391 0-6.625 5.375-12 12-12zM4.547 19.234c0.031-0.063-0.016-0.141-0.109-0.187-0.094-0.031-0.172-0.016-0.203 0.031-0.031 0.063 0.016 0.141 0.109 0.187 0.078 0.047 0.172 0.031 0.203-0.031zM5.031 19.766c0.063-0.047 0.047-0.156-0.031-0.25-0.078-0.078-0.187-0.109-0.25-0.047-0.063 0.047-0.047 0.156 0.031 0.25 0.078 0.078 0.187 0.109 0.25 0.047zM5.5 20.469c0.078-0.063 0.078-0.187 0-0.297-0.063-0.109-0.187-0.156-0.266-0.094-0.078 0.047-0.078 0.172 0 0.281s0.203 0.156 0.266 0.109zM6.156 21.125c0.063-0.063 0.031-0.203-0.063-0.297-0.109-0.109-0.25-0.125-0.313-0.047-0.078 0.063-0.047 0.203 0.063 0.297 0.109 0.109 0.25 0.125 0.313 0.047zM7.047 21.516c0.031-0.094-0.063-0.203-0.203-0.25-0.125-0.031-0.266 0.016-0.297 0.109s0.063 0.203 0.203 0.234c0.125 0.047 0.266 0 0.297-0.094zM8.031 21.594c0-0.109-0.125-0.187-0.266-0.172-0.141 0-0.25 0.078-0.25 0.172 0 0.109 0.109 0.187 0.266 0.172 0.141 0 0.25-0.078 0.25-0.172zM8.937 21.438c-0.016-0.094-0.141-0.156-0.281-0.141-0.141 0.031-0.234 0.125-0.219 0.234 0.016 0.094 0.141 0.156 0.281 0.125s0.234-0.125 0.219-0.219z"></path>
+</svg>
+
+    </a>
+  
+
+  <a id="twitter-link"
+    class="icon" title="Bluesky" aria-label="Twitter"
+    href="https://bsky.app/profile/alex-rogers.bsky.social">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -3.268 64 68.414" width="56.693px" height="56.693px"><path d="M13.873 3.805C21.21 9.332 29.103 20.537 32 26.55v15.882c0-.338-.13.044-.41.867-1.512 4.456-7.418 21.847-20.923 7.944-7.111-7.32-3.819-14.64 9.125-16.85-7.405 1.264-15.73-.825-18.014-9.015C1.12 23.022 0 8.51 0 6.55 0-3.268 8.579-.182 13.873 3.805zm36.254 0C42.79 9.332 34.897 20.537 32 26.55v15.882c0-.338.13.044.41.867 1.512 4.456 7.418 21.847 20.923 7.944 7.111-7.32 3.819-14.64-9.125-16.85 7.405 1.264 15.73-.825 18.014-9.015C62.88 23.022 64 8.51 64 6.55c0-9.818-8.578-6.732-13.873-2.745z"/></svg>
+  </a>
+
+  
+  
+  
+  
+
+  
+    <a id="tags-link"
+       class="icon"
+       title="Tags" aria-label="Tags"
+       href="https://www.cs.ox.ac.uk/people/alex.rogers/tags.html">
+      <svg fill="#000000" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+    <path d="M0 0h24v24H0z" fill="none"/>
+    <path d="M17.63 5.84C17.27 5.33 16.67 5 16 5L5 5.01C3.9 5.01 3 5.9 3 7v10c0 1.1.9 1.99 2 1.99L16 19c.67 0 1.27-.33 1.63-.84L22 12l-4.37-6.16z"/>
+</svg>
+    </a>
+  
+
+  <!-- Optional additional links to insert for icons links -->
+</nav>
+
+
+</div>
+
+    <main class="container">
+      <header>
+  <h1 class="post-title">An 8-bit Manchester SSEM Simulator</h1>
+</header>
+<div class="content">
+  <div class="post-meta">
+  <span class="post-date">11 Oct 2019</span>
+  <span class="post-categories">
+    
+  </span>
+</div>
+
+
+  <div class="post-body">
+    <p>I sometimes give seminars on the history of computing machines and like to use an Elm simulation of an 8-bit version of the Manchester Small-Scale Experimental Machine (SSEM). The one below is useable and there is a full page version <a href="http://www.cs.ox.ac.uk/people/alex.rogers/manchesterSSEM8bit/">here</a>.</p>
+
+<p>It has a memory of 32 8-bit words, an 8-bit accumulator and a 5-bit program counter. Unlike the original it doesn’t increment the program counter before executing the instruction so is a bit easier to describe and program.<br /></p>
+
+<style>
+
+    #manchesterSSEM8bit {
+        width: 760px;
+        height: 480px;
+        background-color: lightgrey;
+        touch-action: none;  
+        border-radius: 10px;
+        padding: 10px;
+    }
+
+    #manchesterSSEM8bit > table {
+        background-color: lightgray;  
+        touch-action: none; 
+        font-family: Arial, sans-serif;
+        font-size: 12px;
+        font-style: normal;
+        font-variant: normal;
+        font-weight: 500;
+        line-height: 12px;
+        border-color: lightgray;
+        position: relative;
+    }
+
+    td {
+        padding: 5px;
+        text-align: center;
+        border: none;
+    }
+
+    .led {
+        width: 60px;
+        height: 60px;
+        background-size: 100% 100%;
+        margin: 0;
+        padding: 0;
+    }
+
+    .grey {
+        background-image:url("https://www.cs.ox.ac.uk/people/alex.rogers/assets/img/led_grey.png");
+    }
+
+    .red {
+        background-image:url("https://www.cs.ox.ac.uk/people/alex.rogers/assets/img/led_red.png");
+    }
+
+    .yellow {
+        background-image:url("https://www.cs.ox.ac.uk/people/alex.rogers/assets/img/led_yellow.png");
+    }
+
+    .green {
+        background-image:url("https://www.cs.ox.ac.uk/people/alex.rogers/assets/img/led_green.png");
+    }
+
+    button {
+        width: 60px;
+        height: 60px;
+        margin: 0;
+        padding: 0;
+        border: none;
+        outline: none;
+        -webkit-appearance: none;
+        background-size: 100% 100%;
+        background-color: lightgray;
+        -webkit-tap-highlight-color: rgba(0,0,0,0);
+        touch-action: manipulation;
+        transition: none;
+        cursor: pointer;
+    }
+
+    button:hover {
+        background: lightgrey;
+        background-size: cover;
+        background-position: center;
+    }
+
+    button.buttonUp {
+        background-image:url("https://www.cs.ox.ac.uk/people/alex.rogers/assets/img/button.png");
+    }
+
+    button.buttonDown {
+        background-image:url("https://www.cs.ox.ac.uk/people/alex.rogers/assets/img/button_active.png");
+    }
+
+</style>
+
+<script>
+
+    function preloader() {
+        if (document.getElementById) {
+            document.getElementById("preload1").style.background = "url('https://www.cs.ox.ac.uk/people/alex.rogers/assets/img/led_red.png') no-repeat -9999px -9999px";
+            document.getElementById("preload2").style.background = "url('https://www.cs.ox.ac.uk/people/alex.rogers/assets/img/led_green.png') no-repeat -9999px -9999px";
+            document.getElementById("preload3").style.background = "url('https://www.cs.ox.ac.uk/people/alex.rogers/assets/img/led_yellow.png') no-repeat -9999px -9999px";
+            document.getElementById("preload4").style.background = "url('https://www.cs.ox.ac.uk/people/alex.rogers/assets/img/button_active.png') no-repeat -9999px -9999px";
+        }
+    }
+
+    function addLoadEvent(func) {
+        var oldonload = window.onload;
+        if (typeof window.onload != 'function') {
+            window.onload = func;
+        } else {
+            window.onload = function() {
+                if (oldonload) {
+                    oldonload();
+                }
+                func();
+            }
+        }
+    }
+
+    addLoadEvent(preloader);
+
+</script>
+
+<div id="preload1"></div>
+<div id="preload2"></div>
+<div id="preload3"></div>
+<div id="preload4"></div>
+
+<div id="manchesterSSEM8bit"></div>
+
+<script src="https://www.cs.ox.ac.uk/people/alex.rogers/assets/scripts/manchesterSSEM8bit.js"></script>
+
+<script>
+
+    var node = document.getElementById("manchesterSSEM8bit");
+    var app = Elm.Main.embed(node);
+
+</script>
+
+<p><br />The instruction set and encoding is the same as the original machine.</p>
+
+<table>
+    <colgroup>
+        <col width="15%" />
+        <col width="65%" />
+        <col width="20%" />
+    </colgroup>
+    <thead>
+        <tr class="header">
+            <th>Inst.</th>
+            <th>Description</th>
+            <th>Encoding</th>
+        </tr>
+    </thead>
+        <tbody>
+        <tr>
+            <td style="text-align: left;">JMP S</td>
+            <td style="text-align: left;">Jump to address at S</td>
+            <td style="text-align: left;">000*****</td>
+        </tr>
+        <tr>
+            <td style="text-align: left;">JRP S</td>
+            <td style="text-align: left;">Jump to program counter + value at S</td>
+            <td style="text-align: left;">100*****</td>
+        </tr>
+        <tr>
+            <td style="text-align: left;">LDN S</td>
+            <td style="text-align: left;">Load and negate value at S into accumulator</td>
+            <td style="text-align: left;">010*****</td>
+        </tr>
+        <tr>
+            <td style="text-align: left;">STO S</td>
+            <td style="text-align: left;">Store contents of accumulator at S</td>
+            <td style="text-align: left;">110*****</td>
+        </tr>
+        <tr>
+            <td style="text-align: left;">SUB S</td>
+            <td style="text-align: left;">Subtract number at S from accumulator</td>
+            <td style="text-align: left;">101*****</td>
+        </tr>
+        <tr>
+            <td style="text-align: left;">CMP S</td>
+            <td style="text-align: left;">Skip next instruction if accumulator is negative</td>
+            <td style="text-align: left;">011*****</td>
+        </tr>
+        <tr>
+            <td style="text-align: left;">STP</td>
+            <td style="text-align: left;">Stop</td>
+            <td style="text-align: left;">111*****</td>
+        </tr>
+    </tbody>
+</table>
+
+
+    
+
+
+
+<div class="post-tags">
+  
+    
+    <a href="https://www.cs.ox.ac.uk/people/alex.rogers/tags.html#manchester">
+    
+      <span class="icon">
+        <svg fill="#000000" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+    <path d="M0 0h24v24H0z" fill="none"/>
+    <path d="M17.63 5.84C17.27 5.33 16.67 5 16 5L5 5.01C3.9 5.01 3 5.9 3 7v10c0 1.1.9 1.99 2 1.99L16 19c.67 0 1.27-.33 1.63-.84L22 12l-4.37-6.16z"/>
+</svg>
+      </span>&nbsp;<span class="tag-name">manchester</span>
+    </a>
+  
+</div>
+  </div>
+
+  
+  <section class="related">
+  <h2>Related Posts</h2>
+  <ul class="posts-list">
+    
+      <li>
+        <h3>
+          <a href="https://www.cs.ox.ac.uk/people/alex.rogers/2021/03/12/avr_board.html">
+            AVR Development Board
+            <small>12 Mar 2021</small>
+          </a>
+        </h3>
+      </li>
+    
+      <li>
+        <h3>
+          <a href="https://www.cs.ox.ac.uk/people/alex.rogers/2020/01/20/bernoulli.html">
+            Ada Lovelace
+            <small>20 Jan 2020</small>
+          </a>
+        </h3>
+      </li>
+    
+  </ul>
+</section>
+
+</div>
+
+    </main>
+
+    <!-- Optional footer content -->
+
+  </body>
+</html>

@@ -228,6 +228,50 @@ B8="$UP/baby8-inspired"
 mkdir -p "$B8"
 clone_if_missing "$B8/baby8" https://github.com/jeceljr/baby8.git
 
+echo "== Layer 9: CCS progref1 + Gunkies link cache =="
+CCSP="$UP/ccs-progref"
+mkdir -p "$CCSP"
+if [ ! -f "$CCSP/progref1.html" ]; then
+  curl -fsSL -L -o "$CCSP/progref1.html" 'https://www.cs.man.ac.uk/CCS/SSEM/progref1.html'
+fi
+GUNK="$UP/gunkies-links"
+mkdir -p "$GUNK"
+if [ ! -f "$GUNK/Small-Scale_Experimental_Machine" ]; then
+  curl -fsSL -L -o "$GUNK/Small-Scale_Experimental_Machine" \
+    'https://gunkies.org/wiki/Small-Scale_Experimental_Machine'
+fi
+
+echo "== Layer 8: Madrona SSEM, ssemref, Digital60, Oxford 8-bit =="
+MAD="$UP/madrona-ssem/programs"
+mkdir -p "$MAD"
+for f in index add bcdiv div dtn hcf hf medclock nightmare noodle parabola primes sqrt; do
+  curl -fsSk --max-time 20 -o "$MAD/${f}.html" \
+    "https://madrona.ca/e/SSEM/programs/${f}.html" 2>/dev/null || true
+done
+
+MREF="$UP/manchester-ref"
+mkdir -p "$MREF"
+if [ ! -f "$MREF/ssemref.html" ]; then
+  curl -fsSL -L -o "$MREF/ssemref.html" \
+    'https://curation.cs.manchester.ac.uk/computer50/www.computer50.org/mark1/prog98/ssemref.html'
+fi
+
+D60="$UP/digital60-instructions"
+mkdir -p "$D60"
+if [ ! -f "$D60/babyInstructions.html" ]; then
+  curl -fsSL -L -o "$D60/babyInstructions.html" \
+    'https://curation.cs.manchester.ac.uk/d60/www.d60.org.uk/babyInstructions.html'
+fi
+
+OX="$UP/oxford-8bit"
+mkdir -p "$OX"
+for u in \
+  'https://www.cs.ox.ac.uk/people/alex.rogers/2019/10/11/manchester.html' \
+  'http://www.cs.ox.ac.uk/people/alex.rogers/manchesterSSEM8bit/' \
+  'https://www.cs.ox.ac.uk/people/alex.rogers/assets/scripts/manchesterSSEM8bit.js'; do
+  curl -fsSL -L --max-time 30 -o "$OX/$(basename "$u")" "$u" 2>/dev/null || true
+done
+
 echo "== Fox book HTML + Retrocomputing factor listing =="
 FOX="$UP/fox-book"
 mkdir -p "$FOX"
