@@ -136,6 +136,33 @@ for f in simple_calc factor primegen; do
     "https://raw.githubusercontent.com/jcla1/gobaby/master/examples/$f.asm"
 done
 
+echo "== BabyBaby FPGA (g4ugm) =="
+BB="$UP/babybaby/BabyBaby"
+if [ ! -d "$BB/.git" ]; then
+  git clone --depth 1 https://github.com/g4ugm/BabyBaby.git "$BB"
+fi
+
+echo "== BlackIce MX book + Linux Voice factor excerpt =="
+BICE="$UP/blackice"
+mkdir -p "$BICE"
+if [ ! -f "$BICE/soft_processors.html" ]; then
+  curl -fsSL -L -o "$BICE/soft_processors.html" \
+    'https://lawrie.github.io/blackicemxbook/Soft_Processors/Soft_Processors.html'
+fi
+LV="$UP/linuxvoice"
+mkdir -p "$LV"
+if [ ! -f "$LV/linuxvoice.txt" ]; then
+  curl -fsSL -L -o "$LV/linuxvoice.txt" \
+    'https://archive.org/stream/LinuxVoice/Linux-Voice-Issue-006_djvu.txt'
+fi
+sed -n '14240,14620p' "$LV/linuxvoice.txt" > "$LV/baby-factor-labbook-reconstruction.txt" 2>/dev/null || true
+
+echo "== AC21009 Manchester Baby Assembler (reference) =="
+A21="$UP/ac21009/AC21009-Assignment-3-Manchester-Baby-Assembler"
+if [ ! -d "$A21/.git" ]; then
+  git clone --depth 1 https://github.com/vlee489/AC21009-Assignment-3-Manchester-Baby-Assembler.git "$A21"
+fi
+
 echo "== Fox book HTML + Retrocomputing factor listing =="
 FOX="$UP/fox-book"
 mkdir -p "$FOX"

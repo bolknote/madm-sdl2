@@ -19,6 +19,8 @@ python3 convert_round3.py         # babyutils labeled asm (EJA); pico/tt cross-c
 python3 convert_fox_retro.py      # Fox book 32-bit dump, Retro SE / gobaby factor.asm
 python3 convert_emustudio_extra.py  # emuStudio ssem.ssem + add 5+3; gobaby dup check
 python3 convert_ccs_mdm.py          # wmadm factor.mdm (dup kilburn_july48 if unchanged)
+python3 convert_round4.py         # BlackIce multiply, babyutils MADD2 README
+python3 convert_babybaby.py       # BabyBaby Programs.coe (slider BABY, primegen, diffeqt)
 python3 visual_check.py             # PNG previews → upstream/_visual_check/
 ./run_sim.sh ../programs/cambridge_fib.store
 ```

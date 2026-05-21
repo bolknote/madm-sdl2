@@ -219,6 +219,34 @@ Regenerate with `python3 ../scripts/convert_round3.py`, which uses
 | `babyutils_test_jrp.store` | **JRP** via `EJA` (`test-jrp.asm`) | Different layout from `bower_mpy_jrptest` |
 | `babyutils_test_count31.store` | Count down with **SKN** / **HLT** at 2^31 wrap | `test-count31.asm` |
 | `babyutils_test_count_forever.store` | Infinite subtract loop (no **HLT**) | `test-count-forever.asm` |
+| `babyutils_madd2_readme.store` | **MADD2** macro (1+2→3); hand-expanded from README | `bas` macro build needs `asm-parse.h`; `test/macro.asm` needs full `bas` |
+
+### BabyBaby FPGA (Dave Haworth / g4ugm)
+
+Source: [g4ugm/BabyBaby](https://github.com/g4ugm/BabyBaby) (Hackaday [project 8912](https://hackaday.io/project/8912-babybaby-or-extremely-small-experimental-computer));
+CCS *Resurrection* 73 describes the MSI **Slider** demo. `Programs.coe` holds four 32-word banks:
+**BabySlide**, **PrimeGen**, **Diffeq**, **Blank**. Regenerate with
+`python3 ../scripts/convert_babybaby.py` (radix-2 LSB-left `.coe` strings).
+
+| File | What it does | Notes |
+|------|----------------|-------|
+| `babybaby_slider_baby.store` | Slider: shifts lower third of store right; **BABY** bitmap on lines 24–31 | Preload from `BabySlide.coe` / bank 1 of `Programs.coe` |
+| `babybaby_primegen.store` | Prime generator (bank 2) | Not byte-identical to `davidsharp_primegen` |
+| `babybaby_diffeqt.store` | Parabola / difference-equation demo (bank 3) | Not byte-identical to `davidsharp_diffeqt` |
+
+Hackaday logs mention other MSI CRT patterns (**Boats**, **Trains**, **Christmas Trees**)
+as alternate bitmaps for the same slider program; those variants are **not** in the
+published `Programs.coe` (only the **BABY** graphic is embedded). The FPGA bitstream
+uses non–LSB-first packing in `lines.hex`; catalog images use the `.coe` disassembly form.
+
+### BlackIce MX (FPGA book)
+
+Source: [Open Source FPGAs using BlackIce MX — Soft Processors](https://lawrie.github.io/blackicemxbook/Soft_Processors/Soft_Processors.html).
+Regenerate with `python3 ../scripts/convert_round4.py`. The book’s `lines.hex` uses **different** 32-bit packing than Williams-tube LSB-left; the catalog image follows the book’s **disassembly** (MADM-compatible).
+
+| File | What it does | Notes |
+|------|----------------|-------|
+| `blackice_multiply.store` | Multiply **5 × 50 → 250** in A and line 31 | 77 steps in `madm_sim`; constants in lines 29–30 |
 
 ### Rust `baby-emulator` / SSEMBabyEmulator
 
@@ -292,6 +320,10 @@ hooks the `ssem_quik` software list.
 | Digital60 2008 contest | `.../Digital60/Digital60-AliceCompetition/` | Live URL 404; Wayback prize pages link missing entry zips; CDX has the same David Sharp emulator zips |
 | CCS SSEM emulators | [computerconservationsociety.org/software/ssem/](https://www.computerconservationsociety.org/software/ssem/) | `madm.zip` = Lee Wittenberg source; `wmadm.zip` = Windows build + `factor.mdm` (July 1948 factor = `kilburn_july48`) and `sample.mdm` (format demo only); `m1sim.zip` = Andy Molyneux 1996 DOS sim + `FACTOR.SNP` |
 | Mark Stevens page listings | ManchesterBaby.computer | Minimal add (10+5→15) = `nevynuk_add`; HCF/989 = `nevynuk_hcf989` |
+| Linux Voice #6 (archive.org) | Lab-book factor reconstruction (OCR) | `scripts/upstream/linuxvoice/baby-factor-labbook-reconstruction.txt`; same algorithm family as `kilburn_july48` / factor programs |
+| AC21009 Baby Assembler | [vlee489/AC21009-…](https://github.com/vlee489/AC21009-Assignment-3-Manchester-Baby-Assembler) | `configSample.txt` opcode table; sample sources use **VAR** / **MTP** dialect, not converted |
+| CCS [software-index.htm](https://www.computerconservationsociety.org/software/software-index.htm) | SSEM emulators linked from `software/ssem/` (madm, wmadm, m1sim) | Same programs as `kilburn_july48`, `m1sim_factor`, etc. |
+| SIMH `SSEM/` | `.st` LOAD/DUMP support | No sample `.st` programs shipped in tree |
 | CCS diagnostic PDF | [volunteers analysis PDF](https://computerconservationsociety.org/ssemvolunteers/volunteers/Baby%20Functions%20Diagnostic%20Test%20Files%20-%20Analysis.1.0.pdf) | Nine `*Test.snp` programs -> `ccs_*test.store` |
 
 Not found as downloadable `.snp` files: `PROG1.SNP` (989 demo, described in a
@@ -320,8 +352,10 @@ python3 convert_round3.py
 python3 convert_fox_retro.py
 python3 convert_emustudio_extra.py
 python3 convert_ccs_mdm.py
+python3 convert_round4.py
+python3 convert_babybaby.py
 ```
 
 See `../scripts/README.md` for script-specific notes.
 
-The catalog currently ships **72** `.store` files (32 lines each).
+The catalog currently ships **77** `.store` files (32 lines each).

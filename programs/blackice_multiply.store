@@ -1,0 +1,36 @@
+# BlackIce MX book — multiply 5×50 (disassembly; not FPGA lines.hex bit order)
+# https://lawrie.github.io/blackicemxbook/Soft_Processors/Soft_Processors.html
+#
+# ci-start -1
+@0 0
+@1 16413
+@2 24601
+@3 16409
+@4 24602
+@5 16410
+@6 49152
+@7 27
+@8 16415
+@9 32798
+@10 24601
+@11 16409
+@12 24607
+@13 16410
+@14 32796
+@15 24601
+@16 16409
+@17 24602
+@18 24
+@19 16415
+@20 24601
+@21 16409
+@22 57344
+@23 0
+@24 4
+@25 0
+@26 0
+@27 18
+@28 -1
+@29 5
+@30 50
+@31 0
