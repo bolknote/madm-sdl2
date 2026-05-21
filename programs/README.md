@@ -39,8 +39,13 @@ python3 ../examples/manchester_baby/madm_sim.py -f programs/cambridge_fib.store 
 | `cambridge_fib.store` | Short Fibonacci run with an easy numeric check |
 | `ccs_all1test.store` | Compact diagnostic covering all opcodes |
 | `show67.store` | Local visual demo that draws `67` after execution |
+| `progref_test_ldn_sto_sub.store` | Short LDN/SUB/STO add (4+2→6) from CCS progref |
+| `madrona_sqrt.store` | Square root by repeated odd subtraction (Hilpert) |
 
 ## Catalog
+
+**100** Williams-tube `.store` images in this directory (32 lines × 32 bits each).
+Regenerate subsets with `../scripts/convert_round*.py` — see [Regenerating](#regenerating).
 
 ### Historical and reference programs
 
@@ -288,26 +293,9 @@ Tracked source: `reference/rust_baby_emulator_countdown.asm` (crate README; `con
 | `show67.store` | Draws bitmap `67` on store rows when run (not pre-painted) | Written for this MADM port |
 | `bolk_anim.store` | Reveals `BOLK` row by row from masked row data | Written for this MADM port |
 
-### Checked but not added as new programs
-
-| Source | Status |
-|--------|--------|
-| [krisjdev/pico-baby-if](https://github.com/krisjdev/pico-baby-if) | Turing long-division RAM matches `nevynuk_turing_longdiv.store` |
-| [charles.fox/comparch](https://gitlab.com/charles.fox/comparch) ch07 / Fox book dump | Same Turing long-division image; see NevynUK note above |
-| [Retrocomputing SE #2869](https://retrocomputing.stackexchange.com/a/2869) | Full `factor.asm` = `gobaby_factor` / `ccs_factorct` (cached as `scripts/upstream/retro-factor/factor.asm`) |
-| Mark Stevens / NevynUK | `reference/mark_stevens_{add,hfr989}.ssem` → `nevynuk_add`, `nevynuk_hcf989` (989 layout differs from `davidsharp_hfr989`) |
-| Retro SE factor listing | `reference/retro_factor_gobaby.asm` (= `gobaby_factor` / `ccs_factorct`) |
-| Cambridge SVBaby SW15–17 | `reference/cambridge_svbaby_switch_map.md` — prog1/2/3 = NIGHT/NOODLE/FIB SNPs (catalog dups) |
-| baby-emulator tests | Only API tests; programs = `baby_rust_add5` + `baby_rust_countdown` |
-| Pico `program.c` | `reference/pico_baby_if_program.c` = Turing long div (= `nevynuk_turing_longdiv`) |
-| gobaby `examples/` | 3 files only; all in catalog |
-| Layer-6 summary | `reference/LAYER6_HARVEST.md` |
-| Layer-7 summary | `reference/LAYER7_HARVEST.md` — babyutils `test/*.asm` mirrors, Fox Turing asm, retro SE comments, NevynUK C++ test notes (no new `.store`) |
-| babyutils `macro.asm` / `relative.asm` / `subroutines.asm` | Need `bas` macro expansion; not in catalog |
-| Layer-8 summary | `reference/LAYER8_HARVEST.md` — Madrona SSEM, Computer50 ssemref A2.x |
-
 ### Madrona SSEM (`madrona.ca/e/SSEM`)
 
+Source: [madrona.ca/e/SSEM/programs/](https://madrona.ca/e/SSEM/programs/) (Brent Hilpert simulator pages; fetch with `curl -k` if TLS fails).
 Regenerate: `python3 ../scripts/convert_round10.py`. HTML mirrors: `reference/madrona/programs/`.
 
 | File | What it does | Notes |
@@ -316,47 +304,44 @@ Regenerate: `python3 ../scripts/convert_round10.py`. HTML mirrors: `reference/ma
 | `madrona_noodletimer.store` | 1998 noodle timer winner | Line 31 fast-sim timing (vs `davidsharp_noodletimer`) |
 | `madrona_sqrt.store` | Square root by odd subtraction | Hilpert 2000; differs from `emustudio_square_root` at line 26 |
 
-Other Madrona pages (add, hf, div, hcf, …) match existing catalog entries; `hf` = `nevynuk_hcf1` (X=35), not `kilburn_july48` (2^18).
+Other Madrona pages (add, dtn, div, hcf, hf, …) match existing catalog entries; `hf` = `nevynuk_hcf1` (X=35), not `kilburn_july48` (2^18).
 
-### Computer50 Programmer's Reference (ssemref A2.x)
+### Programmer's Reference Manual (A1/A2 idioms)
 
-| File | What it does |
-|------|----------------|
-| `manchester_ref_add_xy.store` | A2.1 — add via LDN/SUB/STO (x=5, y=3 → line 30) |
-| `manchester_ref_dec_loop_a22.store` | A2.2 — decrement loop using line 20 as constant + JMP target |
+Two mirrors of the same CCS/Manchester manual: [Computer50 `ssemref.html`](https://curation.cs.manchester.ac.uk/computer50/www.computer50.org/mark1/prog98/ssemref.html) and [CCS `progref1.html`](https://www.cs.man.ac.uk/CCS/SSEM/progref1.html). Patterns in `reference/manchester-ref/` and `reference/ccs-progref/`. Harvest notes: `reference/LAYER8_HARVEST.md`, `reference/LAYER9_HARVEST.md`.
 
-Patterns: `reference/manchester-ref/*.asm`. A2.3 instruction-modification is reference-only (incomplete).
+| File | What it does | Regenerate |
+|------|----------------|------------|
+| `manchester_ref_add_xy.store` | A2.1 — add x+y via LDN/SUB/STO (5+3→line 30) | `convert_round10.py` |
+| `manchester_ref_dec_loop_a22.store` | A2.2 variant — dec loop (lines 1–7, 20, 28, 31) | `convert_round10.py` |
+| `ccs_progref_small_constant_loop.store` | A2.2 canonical — dual-use line 20 (constant 1 + JMP→line 2) | `convert_round11.py` |
+| `ccs_progref_instruction_mod.store` | A2.3 — one-step instruction modification at line 6 | `convert_round11.py` |
+| `ccs_progref_counting.store` | A2.4 — counter in instruction address field | `convert_round11.py` |
+| `progref_test_ldn_sto_sub.store` | Mini-test: LDN/SUB/STO (4+2→6) | `convert_round11.py` |
+| `progref_test_cmp_jmp_indirect.store` | A1.1 — CMP + indirect JMP loop | `convert_round11.py` |
+| `progref_test_jrp_relative.store` | A1.2 — JRP relative jump | `convert_round11.py` |
+| `progref_test_func5_alias_sub.store` | Function 5 = SUB (MADM `exec_ins.c` optab) | `convert_round11.py` |
+| `progref_test_ci_wraparound.store` | A1.3 — CMP at line 30 → execute line 0 | `convert_round11.py` |
 
-### ssem-inspired / other layer-8
+A2.3 full “instruction as data” fragment is incomplete in the manual; `ccs_progref_instruction_mod` is the runnable one-step demo.
+
+### Checked but not added as new programs
 
 | Source | Status |
 |--------|--------|
-| Oxford 8-bit SSEM | `ssem-inspired/oxford-8bit/` — Elm simulator, no preset 32-bit stores |
-| Digital60 `babyInstructions.html` | Pedagogy only — `reference/digital60_baby_instructions_note.md` |
-| HASE homepages mirror | Same mu_baby zip as existing `hase_*` stores — `reference/hase_mirror_note.md` |
-
-### CCS Programmer's Reference (`progref1.html`)
-
-Regenerate: `python3 ../scripts/convert_round11.py`. Patterns: `reference/ccs-progref/`.
-
-| File | What it does |
-|------|----------------|
-| `ccs_progref_small_constant_loop.store` | A2.2 — dual-use line 20 (constant 1 + JMP indirect to line 2) |
-| `ccs_progref_instruction_mod.store` | A2.3 — modify instruction at line 6 |
-| `ccs_progref_counting.store` | A2.4 — counter in instruction address field |
-| `manchester_ref_add_xy.store` | A2.1 (same bytes; curation `ssemref` = CCS `progref1`) |
-
-### progref emulator mini-tests
-
-| File | What it tests |
-|------|----------------|
-| `progref_test_ldn_sto_sub.store` | LDN / SUB / STO addition idiom |
-| `progref_test_cmp_jmp_indirect.store` | A1.1 CMP + indirect JMP |
-| `progref_test_jrp_relative.store` | A1.2 JRP |
-| `progref_test_func5_alias_sub.store` | Undocumented function 5 (= SUB in MADM) |
-| `progref_test_ci_wraparound.store` | A1.3 CI wrap 30 → 0 |
-
-Link map: `reference/gunkies_baby_links.md`.
+| [krisjdev/pico-baby-if](https://github.com/krisjdev/pico-baby-if) | Turing long-division RAM matches `nevynuk_turing_longdiv.store` |
+| [charles.fox/comparch](https://gitlab.com/charles.fox/comparch) ch07 / Fox book dump | Same Turing long-division image; see NevynUK note above |
+| [Retrocomputing SE #2869](https://retrocomputing.stackexchange.com/a/2869) | Full `factor.asm` = `gobaby_factor` / `ccs_factorct` (`reference/retro_factor_gobaby.asm`) |
+| Mark Stevens / NevynUK C++ tests | `reference/nevynuk_cpp_unit_tests.md` — API only; programs = existing `nevynuk_*.store` |
+| Cambridge SVBaby SW15–17 | `reference/cambridge_svbaby_switch_map.md` — prog1/2/3 = NIGHT/NOODLE/FIB SNPs (catalog dups) |
+| baby-emulator crate tests | Only API tests; programs = `baby_rust_add5` + `baby_rust_countdown` |
+| Pico `program.c` | `reference/pico_baby_if_program.c` = Turing long div |
+| babyutils `macro.asm` / `relative.asm` / `subroutines.asm` | Need `bas` macro expansion; mirrors in `reference/babyutils/` |
+| [Gunkies Manchester Baby](https://gunkies.org/wiki/Manchester_Baby) | Link map only — `reference/gunkies_baby_links.md` |
+| Oxford 8-bit SSEM | `ssem-inspired/oxford-8bit/` — Elm UI, no preset 32-bit stores |
+| Digital60 `babyInstructions.html` | Pedagogy — `reference/digital60_baby_instructions_note.md` |
+| HASE homepages mirror | Same mu_baby zip as `hase_*` — `reference/hase_mirror_note.md` |
+| Layer harvest index | `reference/LAYER6_HARVEST.md` … `LAYER9_HARVEST.md` |
 | [open-simh/simh](https://github.com/open-simh/simh) | `SSEM/` supports `LOAD`/`DUMP` of `.st` store files and mnemonic entry, but ships no sample `.st` programs |
 | [diy-ic/tt-manchester-baby](https://github.com/diy-ic/tt-manchester-baby) | `test/test.py` init RAM is Turing long division, identical to `nevynuk_turing_longdiv.store` |
 | [EMF Manchester Baby](https://em.ulat.es/machines/ManchesterBaby/) | HTTPS fetch failed here; retry manually for embedded JS demos |
@@ -443,11 +428,12 @@ python3 convert_round5.py
 python3 convert_round6.py
 python3 convert_round7.py
 python3 convert_round8.py
+python3 convert_round9.py    # layer 7 refs (no new stores)
+python3 convert_round10.py   # Madrona + manchester-ref A2.x
+python3 convert_round11.py   # CCS progref + mini-tests
 ```
 
 See `../scripts/README.md` for script-specific notes.
-
-The catalog currently ships **87** `.store` files (32 lines each).
 
 ## Non-Baby architectures (separate tree)
 
