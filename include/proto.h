@@ -31,6 +31,8 @@ void display_line(unsigned tube, Addr line);
 void exec_instruction(void);
 void execute(void);
 void fetch_instruction(void);
+void madm_speed_faster(void);
+void madm_speed_slower(void);
 
 /* platform graphics */
 void set_up_graphics(void);

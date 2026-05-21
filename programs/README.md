@@ -1,6 +1,6 @@
 # Programs for MADM
 
-**100** Williams-tube `.store` files: 32 lines × 32 bits, least-significant bit first (original CRT layout).
+**101** Williams-tube `.store` files: 32 lines × 32 bits, least-significant bit first (original CRT layout).
 
 ## Run
 
@@ -11,7 +11,7 @@ make
 ./madm -f programs/davidsharp_primegen.store
 ```
 
-**Enter** — run · **s** — step · arrows + space — edit bits · **Esc** — quit.
+**Enter** — run · **s** — step · **+/-** — speed · arrows + space — edit bits · **Esc** — quit.
 
 Headless check:
 
@@ -36,6 +36,7 @@ python3 ../examples/manchester_baby/madm_sim.py -f programs/cambridge_fib.store 
 | `gobaby_factor.store` | Classic factor program (Retro SE / CCS layout) |
 | `nevynuk_turing_longdiv.store` | Turing long division |
 | `show67.store` | Local demo — draws `67` on the tube |
+| `bolk_scroll.store` | Local demo — scrolling `BOLK` marquee |
 
 ## Catalog (by prefix)
 
@@ -55,7 +56,7 @@ python3 ../examples/manchester_baby/madm_sim.py -f programs/cambridge_fib.store 
 | `bower_` | 3 | `fibonacci`, `jrptest` |
 | `babybaby_` | 3 | `slider_baby`, `primegen`, `diffeqt` |
 | `rosetta_` | 3 | `stop`, `empty_loop`, `hello_graphical` |
-| other | 8 | `kilburn_july48`, `m1sim_factor`, `cambridge_fib`, `blackice_multiply`, `baby_rust_*`, `show67`, `bolk_anim` |
+| other | 9 | `kilburn_july48`, `m1sim_factor`, `cambridge_fib`, `blackice_multiply`, `baby_rust_*`, `show67`, `bolk_anim`, `bolk_scroll` |
 
 Full list: `ls *.store`. Many names overlap across sources (same bytes, different archives).
 

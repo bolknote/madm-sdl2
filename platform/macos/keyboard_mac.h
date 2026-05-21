@@ -9,6 +9,8 @@
 #define CLEAR_CMD 'c'
 #define CLR_AC_CMD 'k'
 #define TOGGLE_CMD ' '
+#define FASTER_CMD '+'
+#define SLOWER_CMD '-'
 #define QUIT_CMD '\033'
 
 /* Distinct codes (not IBM scan codes) — mapped from SDL keys in keyboard_mac.c */
@@ -19,9 +21,13 @@
 
 #define next_cmd() madm_next_cmd()
 #define cmd_ready() madm_cmd_ready()
+#define peek_cmd() madm_peek_cmd()
+#define delay_ms(ms) madm_delay_ms(ms)
 
 int madm_next_cmd(void);
 int madm_cmd_ready(void);
+int madm_peek_cmd(void);
 void madm_pump_keyboard(void);
+void madm_delay_ms(unsigned ms);
 
 #endif

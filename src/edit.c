@@ -24,6 +24,12 @@ edit(void)
 			erase_cursor();
 			madm_status = MADM_MANUAL;
 			return 1;
+		case FASTER_CMD:
+			madm_speed_faster();
+			break;
+		case SLOWER_CMD:
+			madm_speed_slower();
+			break;
 		case CLEAR_CMD:
 			for (Addr line = 0; line < STORE_SIZE; line++) {
 				store[line] = 0;

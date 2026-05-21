@@ -21,6 +21,13 @@ map_sdl_key(SDL_Keycode sym)
 		return QUIT_CMD;
 	case SDLK_SPACE:
 		return TOGGLE_CMD;
+	case SDLK_PLUS:
+	case SDLK_EQUALS:
+	case SDLK_KP_PLUS:
+		return FASTER_CMD;
+	case SDLK_MINUS:
+	case SDLK_KP_MINUS:
+		return SLOWER_CMD;
 	case SDLK_UP:
 		return UP_CMD;
 	case SDLK_DOWN:
@@ -65,6 +72,12 @@ madm_cmd_ready(void)
 }
 
 int
+madm_peek_cmd(void)
+{
+	return madm_cmd_ready() ? pending_key : -1;
+}
+
+int
 madm_next_cmd(void)
 {
 	while (!madm_cmd_ready())
@@ -76,4 +89,10 @@ madm_next_cmd(void)
 		pending_key = -1;
 		return k;
 	}
+}
+
+void
+madm_delay_ms(unsigned ms)
+{
+	SDL_Delay(ms);
 }

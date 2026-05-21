@@ -27,11 +27,12 @@ make run-demo
 | Space | Toggle bit |
 | Enter | Run program |
 | `s` | Single step |
+| `+` / `-` | Faster / slower run speed |
 | `c` | Clear store |
 | `k` | Clear accumulator and control lines |
 | Esc | Quit |
 
-Any key while running stops the machine (same quirk as the original simulator).
+Any key except `+`/`-` while running stops the machine (same quirk as the original simulator).
 
 ## Layout
 
