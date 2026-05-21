@@ -1,0 +1,12 @@
+; lexbailey/C88 test_program_1.vhd
+; C88 homebrew: 8 addresses × 8 bits (VHDL std_logic_vector, MSB-left).
+; Not compatible with Manchester Baby 32×32 .store — see ssem-inspired/README.md
+
+00000111
+10000110
+00010101
+00011000
+00000000
+00000000
+00001100
+00000011

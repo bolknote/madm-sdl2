@@ -1,5 +1,5 @@
-# BlackIce MX book — multiply 5×50 (disassembly; not FPGA lines.hex bit order)
-# https://lawrie.github.io/blackicemxbook/Soft_Processors/Soft_Processors.html
+# BlackIce MX book — multiply 5×50 (MADM LSB-left)
+# reference/blackice_multiply.asm
 #
 # ci-start -1
 @0 0

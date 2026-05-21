@@ -1,5 +1,5 @@
-# baby-emulator — count 10 down via CMP/JMP loop (README ASM example)
-# https://github.com/jasonalexander-ja/SSEMBabyEmulator
+# baby-emulator — count 10 down via CMP/JMP loop (README ASM)
+# reference/rust_baby_emulator_countdown.asm
 #
 # ci-start -1
 @0 16391

@@ -1,5 +1,5 @@
 # baby-emulator — new_example_program (5+5 in accumulator)
-# https://docs.rs/baby-emulator/0.2.2/baby_emulator/core/struct.BabyModel.html#method.new_example_program
+# https://docs.rs/baby-emulator/0.2.1/baby_emulator/core/struct.BabyModel.html#method.new_example_program
 #
 # ci-start -1
 @0 16389

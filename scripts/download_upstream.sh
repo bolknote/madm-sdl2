@@ -100,6 +100,32 @@ mkdir -p "$NEV"
 if [ ! -d "$NEV/ManchesterBaby/.git" ]; then
   git clone --depth 1 https://github.com/NevynUK/ManchesterBaby.git "$NEV/ManchesterBaby"
 fi
+MARK="$UP/mark-stevens"
+mkdir -p "$MARK"
+for f in Add.ssem hfr989.ssem; do
+  if [ -f "$NEV/ManchesterBaby/Source/SSEMPrograms/$f" ]; then
+    cp -f "$NEV/ManchesterBaby/Source/SSEMPrograms/$f" "$MARK/$f"
+  fi
+done
+
+echo "== BlackIce multiply reference (lines.hex + disasm) =="
+BICE="$UP/blackice"
+mkdir -p "$BICE"
+if [ ! -f "$BICE/soft_processors.html" ]; then
+  curl -fsSL -L -o "$BICE/soft_processors.html" \
+    'https://lawrie.github.io/blackicemxbook/Soft_Processors/Soft_Processors.html'
+fi
+# Canonical hex/disasm committed under scripts/upstream/blackice/; multiply.asm from convert_round4/6
+
+echo "== baby-emulator crate (countdown ASM in README) =="
+mkdir -p "$UP/baby-rust"
+for ver in 0.2.2 0.2.1; do
+  if [ ! -d "$UP/baby-rust/baby-emulator-${ver}/src" ]; then
+    curl -fsSL -o "$UP/baby-rust/baby-emulator-${ver}.crate" \
+      "https://static.crates.io/crates/baby-emulator/baby-emulator-${ver}.crate"
+    tar -xf "$UP/baby-rust/baby-emulator-${ver}.crate" -C "$UP/baby-rust" 2>/dev/null || true
+  fi
+done
 
 echo "== JsSSEM (Wayback) =="
 curl -fsSL -o "$UP/jsssem.html" \
@@ -162,6 +188,23 @@ A21="$UP/ac21009/AC21009-Assignment-3-Manchester-Baby-Assembler"
 if [ ! -d "$A21/.git" ]; then
   git clone --depth 1 https://github.com/vlee489/AC21009-Assignment-3-Manchester-Baby-Assembler.git "$A21"
 fi
+
+echo "== Round 5: C88 (8-byte SSEM-like), EMF, Baby8 reference =="
+C88R="$UP/ssem-inspired/c88"
+mkdir -p "$C88R"
+clone_if_missing "$C88R/C88" https://github.com/lexbailey/C88.git
+clone_if_missing "$C88R/c88-js" https://github.com/aquila12/c88-js.git
+
+EMF="$UP/emf-manchester"
+mkdir -p "$EMF"
+for f in index.html baby-importer.js main.js emf-2.0.min.js emulator-2.0.min.js; do
+  curl -fsSL -k -L --max-time 30 -o "$EMF/$f" \
+    "https://em.ulat.es/machines/ManchesterBaby/$f" 2>/dev/null || true
+done
+
+B8="$UP/baby8-inspired"
+mkdir -p "$B8"
+clone_if_missing "$B8/baby8" https://github.com/jeceljr/baby8.git
 
 echo "== Fox book HTML + Retrocomputing factor listing =="
 FOX="$UP/fox-book"

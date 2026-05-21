@@ -1,5 +1,5 @@
-# NevynUK — Add two numbers (10 + 5 → line 22)
-# https://github.com/NevynUK/ManchesterBaby/blob/main/Source/SSEMPrograms/Add.ssem
+# Mark Stevens / NevynUK — 10 + 5 → 15 in accumulator
+# reference/mark_stevens_add.ssem
 #
 # ci-start 0
 @0 0

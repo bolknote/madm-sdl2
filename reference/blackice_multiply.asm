@@ -1,0 +1,34 @@
+; MADM LSB-left listing derived from blackice_multiply.disasm
+
+00: JMP 0
+01: LDN 29
+02: STO 25
+03: LDN 25
+04: STO 26
+05: LDN 26
+06: CMP 0
+07: JMP 27
+08: LDN 31
+09: SUB 30
+10: STO 25
+11: LDN 25
+12: STO 31
+13: LDN 26
+14: SUB 28
+15: STO 25
+16: LDN 25
+17: STO 26
+18: JMP 24
+19: LDN 31
+20: STO 25
+21: LDN 25
+22: STP 0
+23: NUM 0
+24: NUM 4
+25: NUM 0
+26: NUM 0
+27: NUM 18
+28: NUM -1
+29: NUM 5
+30: NUM 50
+31: NUM 0

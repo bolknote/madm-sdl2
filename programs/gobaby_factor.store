@@ -1,5 +1,5 @@
-# gobaby — Original factor program (2^18) (same bytes as ccs_factorct.store)
-# https://github.com/jcla1/gobaby/blob/main/examples/factor.asm
+# gobaby factor 2^18 — Retro SE / gobaby examples/factor.asm
+# reference/retro_factor_gobaby.asm
 #
 # ci-start -1
 @0 0

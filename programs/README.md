@@ -248,6 +248,8 @@ Regenerate with `python3 ../scripts/convert_round4.py`. The book’s `lines.hex`
 |------|----------------|-------|
 | `blackice_multiply.store` | Multiply **5 × 50 → 250** in A and line 31 | 77 steps in `madm_sim`; constants in lines 29–30 |
 
+Tracked sources: `reference/blackice_multiply.{asm,lines.hex,disasm}` (FPGA hex is not MADM bit order).
+
 ### Rust `baby-emulator` / SSEMBabyEmulator
 
 Layouts are taken from `core/mod.rs` and assembler docs. Crates.io `0.2.1`
@@ -257,6 +259,8 @@ source does not build as-is because of format-string typos.
 |------|----------------|
 | `baby_rust_add5.store` | `BabyModel::new_example_program()`; 5+5 -> A = -10 display |
 | `baby_rust_countdown.store` | README loop: 10 down to -1, about 34 steps |
+
+Tracked source: `reference/rust_baby_emulator_countdown.asm` (crate README; `convert_round6.py`).
 
 ### Local demos
 
@@ -272,7 +276,8 @@ source does not build as-is because of format-string typos.
 | [krisjdev/pico-baby-if](https://github.com/krisjdev/pico-baby-if) | Turing long-division RAM matches `nevynuk_turing_longdiv.store` |
 | [charles.fox/comparch](https://gitlab.com/charles.fox/comparch) ch07 / Fox book dump | Same Turing long-division image; see NevynUK note above |
 | [Retrocomputing SE #2869](https://retrocomputing.stackexchange.com/a/2869) | Full `factor.asm` = `gobaby_factor` / `ccs_factorct` (cached as `scripts/upstream/retro-factor/factor.asm`) |
-| Mark Stevens blog sample | `Add.ssem` (10+5→15) = `nevynuk_add.store`; `hfr989.ssem` = `nevynuk_hcf989` (layout differs from `davidsharp_hfr989`) |
+| Mark Stevens / NevynUK | `reference/mark_stevens_{add,hfr989}.ssem` → `nevynuk_add`, `nevynuk_hcf989` (989 layout differs from `davidsharp_hfr989`) |
+| Retro SE factor listing | `reference/retro_factor_gobaby.asm` (= `gobaby_factor` / `ccs_factorct`) |
 | [open-simh/simh](https://github.com/open-simh/simh) | `SSEM/` supports `LOAD`/`DUMP` of `.st` store files and mnemonic entry, but ships no sample `.st` programs |
 | [diy-ic/tt-manchester-baby](https://github.com/diy-ic/tt-manchester-baby) | `test/test.py` init RAM is Turing long division, identical to `nevynuk_turing_longdiv.store` |
 | [EMF Manchester Baby](https://em.ulat.es/machines/ManchesterBaby/) | HTTPS fetch failed here; retry manually for embedded JS demos |
@@ -354,8 +359,18 @@ python3 convert_emustudio_extra.py
 python3 convert_ccs_mdm.py
 python3 convert_round4.py
 python3 convert_babybaby.py
+python3 convert_round5.py
+python3 convert_round6.py
 ```
 
 See `../scripts/README.md` for script-specific notes.
 
 The catalog currently ships **77** `.store` files (32 lines each).
+
+## Non-Baby architectures (separate tree)
+
+Round-5 sources that are **not** 32×32 Baby store images are documented under
+[`../ssem-inspired/README.md`](../ssem-inspired/README.md): **C88** (8×8-bit RAM),
+**EMF** web UI (David Sharp–family `.bys` buttons; samples not on server),
+**Baby8** soft-core (different ISA), and notes on missing BabyBaby boat/train
+slider bitmaps. **Open SIMH** supports `.st` load but ships no example files.

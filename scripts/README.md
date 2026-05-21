@@ -21,6 +21,8 @@ python3 convert_emustudio_extra.py  # emuStudio ssem.ssem + add 5+3; gobaby dup 
 python3 convert_ccs_mdm.py          # wmadm factor.mdm (dup kilburn_july48 if unchanged)
 python3 convert_round4.py         # BlackIce multiply, babyutils MADD2 README
 python3 convert_babybaby.py       # BabyBaby Programs.coe (slider BABY, primegen, diffeqt)
+python3 convert_round5.py         # C88 → ../ssem-inspired/c88/*.c88ram (not .store)
+python3 convert_round6.py         # Rust countdown ASM, BlackIce hex/disasm, Mark Stevens refs
 python3 visual_check.py             # PNG previews → upstream/_visual_check/
 ./run_sim.sh ../programs/cambridge_fib.store
 ```
